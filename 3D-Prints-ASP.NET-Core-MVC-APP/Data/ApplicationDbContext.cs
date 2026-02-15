@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using _3D_Prints_ASP.NET_Core_MVC_APP.Data.Models;
+using _3D_Prints_APP.Data.Models;
 
-namespace _3D_Prints_ASP.NET_Core_MVC_APP.Data
+namespace _3D_Prints_APP.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
@@ -20,11 +20,9 @@ namespace _3D_Prints_ASP.NET_Core_MVC_APP.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // composite key for join table
             modelBuilder.Entity<PrintFilament>()
                 .HasKey(x => new { x.PrintId, x.FilamentId });
 
-            // configure join relationships explicitly
             modelBuilder.Entity<PrintFilament>()
                 .HasOne(pf => pf.Print)
                 .WithMany(p => p.PrintFilaments)
@@ -53,14 +51,12 @@ namespace _3D_Prints_ASP.NET_Core_MVC_APP.Data
                 .Property(p => p.NozzleDiameter)
                 .HasPrecision(18, 2);
 
-            // Printer (1) <-> Filament (many) : restrict delete to avoid multiple cascade paths
             modelBuilder.Entity<Filament>()
                 .HasOne(f => f.Printer)
                 .WithMany(f => f.Filaments)
                 .HasForeignKey(f => f.PrinterId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Print -> Printer (cascade delete prints if a printer is removed)
             modelBuilder.Entity<Print>()
                 .HasOne(p => p.Printer)
                 .WithMany(pr => pr.Prints)

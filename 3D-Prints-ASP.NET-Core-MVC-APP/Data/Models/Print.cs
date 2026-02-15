@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static _3D_Prints_ASP.NET_Core_MVC_APP.Data.Validations.Validations;
+using static _3D_Prints_APP.Data.Validations.Validations;
 
-namespace _3D_Prints_ASP.NET_Core_MVC_APP.Data.Models
+namespace _3D_Prints_APP.Data.Models
 {
     public class Print
     {

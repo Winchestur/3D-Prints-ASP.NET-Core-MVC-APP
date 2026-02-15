@@ -4,8 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-_3D_Prints_ASP.NET_Core_MVC_APP-2cb98bae-5a30-4d14-916e-3a0bd068c161</UserSecretsId>
-    <RootNamespace>3D-Prints-ASP.NET-Core-MVC-APP</RootNamespace>
+    <UserSecretsId>aspnet-3D-Prints-APP-2cb98bae-5a30-4d14-916e-3a0bd068c161</UserSecretsId>
+    <RootNamespace>3DPrintsAPP</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,11 +13,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.13">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.12" />
   </ItemGroup>
 
 </Project>

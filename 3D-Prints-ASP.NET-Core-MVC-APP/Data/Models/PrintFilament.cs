@@ -1,4 +1,4 @@
-﻿using _3D_Prints_ASP.NET_Core_MVC_APP.Data.Models;
+﻿using _3D_Prints_APP.Data.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

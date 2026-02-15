@@ -29,3 +29,50 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* Global dark background like auth */
+body {
+    background: radial-gradient(circle at 20% 20%, #6b8cff 0%, transparent 40%), radial-gradient(circle at 80% 30%, #ff7ab6 0%, transparent 40%), linear-gradient(180deg, #0f1117, #161a22);
+    min-height: 100vh;
+}
+
+/* main wrapper */
+.app-main {
+    min-height: calc(100vh - 120px);
+    padding: 0 0 2rem 0;
+}
+
+/* glass navbar everywhere */
+.app-navbar {
+    background: rgba(255,255,255,0.08) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255,255,255,0.15) !important;
+}
+
+    /* navbar text */
+    .app-navbar .navbar-brand,
+    .app-navbar .nav-link {
+        color: rgba(255,255,255,0.92) !important;
+    }
+
+        .app-navbar .nav-link:hover {
+            color: #ffffff !important;
+            text-decoration: underline;
+        }
+
+/* footer glass too */
+footer.footer {
+    background: rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(255,255,255,0.12) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+    footer.footer, footer.footer a {
+        color: rgba(255,255,255,0.75) !important;
+    }
+
+        footer.footer a:hover {
+            color: #fff !important;
+        }

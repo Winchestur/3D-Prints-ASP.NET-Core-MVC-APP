@@ -1,0 +1,44 @@
+﻿@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<link rel="stylesheet" href="~/css/auth.css" asp-append-version="true" />
+
+<div class="auth-page">
+    <div class="auth-card">
+
+        <div class="auth-title">Sign in</div>
+
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <input asp-for="Input.Email" class="form-control" placeholder="Email" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <input asp-for="Input.Password" class="form-control" placeholder="Password" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-check text-start">
+                <input asp-for="Input.RememberMe" class="form-check-input" />
+                <label asp-for="Input.RememberMe" class="form-check-label">
+                    Remember me
+                </label>
+            </div>
+
+            <button type="submit" class="auth-btn">
+                Log in
+            </button>
+
+            <a asp-page="./Register" class="auth-link">
+                Create new account
+            </a>
+
+        </form>
+    </div>
+</div>

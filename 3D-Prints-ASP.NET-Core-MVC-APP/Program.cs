@@ -1,8 +1,8 @@
-using _3D_Prints_ASP.NET_Core_MVC_APP.Data;
+using _3D_Prints_APP.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace _3D_Prints_ASP.NET_Core_MVC_APP
+namespace _3D_Prints_APP
 {
     public class Program
     {

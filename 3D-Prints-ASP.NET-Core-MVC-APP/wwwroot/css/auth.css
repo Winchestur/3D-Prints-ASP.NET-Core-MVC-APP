@@ -1,0 +1,95 @@
+﻿/* page */
+.auth-page {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 20% 20%, #6b8cff 0%, transparent 40%), radial-gradient(circle at 80% 30%, #ff7ab6 0%, transparent 40%), linear-gradient(180deg, #0f1117, #161a22);
+    padding: 2rem;
+}
+
+/* Glass panel */
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 2rem;
+    color: white;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+}
+
+/* Title */
+.auth-title {
+    font-size: 1.9rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Inputs */
+.auth-card .form-control {
+    border-radius: 12px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: white;
+}
+
+    .auth-card .form-control::placeholder {
+        color: rgba(255,255,255,0.7);
+    }
+
+    /* Focus */
+    .auth-card .form-control:focus {
+        background: rgba(255,255,255,0.2);
+        border-color: #6b8cff;
+        box-shadow: 0 0 0 2px rgba(107,140,255,.35);
+    }
+
+/* Button */
+.auth-btn {
+    width: 100%;
+    border-radius: 12px;
+    font-weight: 700;
+    padding: .6rem;
+    margin-top: 1rem;
+    background: linear-gradient(135deg, #6b8cff, #ff7ab6);
+    border: none;
+    color: white;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+    .auth-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,.45);
+    }
+
+/* Links */
+.auth-link {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+}
+
+    .auth-link:hover {
+        color: white;
+        text-decoration: underline;
+    }
+
+/* Navbar glass само когато си на Login/Register */
+body.auth-mode .navbar {
+    background: rgba(255,255,255,0.08) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.12) !important;
+}
+
+    body.auth-mode .navbar .nav-link,
+    body.auth-mode .navbar .navbar-brand {
+        color: rgba(255,255,255,0.9) !important;
+    }

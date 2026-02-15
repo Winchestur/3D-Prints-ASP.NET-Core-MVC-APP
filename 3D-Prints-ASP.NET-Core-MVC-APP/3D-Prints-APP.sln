@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36908.2 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3D-Prints-ASP.NET-Core-MVC-APP", "3D-Prints-ASP.NET-Core-MVC-APP.csproj", "{4CFFC9CF-1CD0-4325-AFDF-6B53F4F960DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3D-Prints-APP", "3D-Prints-APP.csproj", "{4CFFC9CF-1CD0-4325-AFDF-6B53F4F960DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

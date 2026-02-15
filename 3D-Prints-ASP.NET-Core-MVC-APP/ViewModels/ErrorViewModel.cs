@@ -1,4 +1,4 @@
-namespace _3D_Prints_ASP.NET_Core_MVC_APP.Models
+namespace _3D_Prints_APP.Models
 {
     public class ErrorViewModel
     {

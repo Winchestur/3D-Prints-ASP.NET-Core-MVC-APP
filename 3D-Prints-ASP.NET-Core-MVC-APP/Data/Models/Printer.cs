@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static _3D_Prints_ASP.NET_Core_MVC_APP.Data.Validations.Validations;
-using _3D_Prints_ASP.NET_Core_MVC_APP.Data.Enums;
+using static _3D_Prints_APP.Data.Validations.Validations;
+using _3D_Prints_APP.Data.Enums;
 
-namespace _3D_Prints_ASP.NET_Core_MVC_APP.Data.Models
+namespace _3D_Prints_APP.Data.Models
 {
     public class Printer
     {

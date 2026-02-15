@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using _3D_Prints_ASP.NET_Core_MVC_APP.Data;
+using _3D_Prints_APP.Data;
 
 #nullable disable
 
@@ -244,7 +244,7 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
 
                     b.HasIndex("FilamentId");
 
-                    b.ToTable("PrintFilaments");
+                    b.ToTable("PrintFilaments", (string)null);
                 });
 
             modelBuilder.Entity("_3D_Prints_ASP.NET_Core_MVC_APP.Data.Models.Filament", b =>
@@ -275,7 +275,7 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
 
                     b.HasIndex("PrinterId");
 
-                    b.ToTable("Filaments");
+                    b.ToTable("Filaments", (string)null);
                 });
 
             modelBuilder.Entity("_3D_Prints_ASP.NET_Core_MVC_APP.Data.Models.Print", b =>
@@ -313,7 +313,7 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
 
                     b.HasIndex("PrinterId");
 
-                    b.ToTable("Prints");
+                    b.ToTable("Prints", (string)null);
                 });
 
             modelBuilder.Entity("_3D_Prints_ASP.NET_Core_MVC_APP.Data.Models.Printer", b =>
@@ -350,7 +350,7 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Printers");
+                    b.ToTable("Printers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
