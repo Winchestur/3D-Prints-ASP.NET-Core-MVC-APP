@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
-namespace _3D_Prints_APP.Areas.Identity.Pages.Account
+namespace _3DPrintsAPP.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {

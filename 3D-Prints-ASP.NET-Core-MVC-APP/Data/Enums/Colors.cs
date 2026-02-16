@@ -1,4 +1,4 @@
-﻿namespace _3D_Prints_APP.Data.Enums
+﻿namespace _3DPrintsAPP.Data.Enums
 {
     public enum Colors
     {

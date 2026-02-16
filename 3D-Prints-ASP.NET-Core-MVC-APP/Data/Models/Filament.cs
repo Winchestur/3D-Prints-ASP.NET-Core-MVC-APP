@@ -1,8 +1,8 @@
-﻿using _3D_Prints_APP.Data.Enums;
+﻿using _3DPrintsAPP.Data.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace _3D_Prints_APP.Data.Models
+namespace _3DPrintsAPP.Data.Models
 {
     public class Filament
     {

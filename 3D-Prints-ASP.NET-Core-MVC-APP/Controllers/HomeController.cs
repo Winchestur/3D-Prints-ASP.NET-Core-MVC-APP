@@ -1,8 +1,9 @@
 using System.Diagnostics;
-using _3D_Prints_APP.Models;
+using _3DPrintsAPP.Data.Models;
+using _3DPrintsAPP.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace _3D_Prints_APP.Controllers
+namespace _3DPrintsAPP.Controllers
 {
     public class HomeController : Controller
     {

@@ -1,48 +1,49 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
+/* ===== Global dark background like auth ===== */
 body {
-  margin-bottom: 60px;
-}
-
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
-}
-
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
-}
-
-/* Global dark background like auth */
-body {
+    margin-bottom: 60px;
     background: radial-gradient(circle at 20% 20%, #6b8cff 0%, transparent 40%), radial-gradient(circle at 80% 30%, #ff7ab6 0%, transparent 40%), linear-gradient(180deg, #0f1117, #161a22);
     min-height: 100vh;
+    color: rgba(255,255,255,0.92);
 }
 
-/* main wrapper */
+/* Fix placeholder alignment from template */
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}
+
+/* main wrapper (ако използваш .app-main в layout) */
 .app-main {
     min-height: calc(100vh - 120px);
     padding: 0 0 2rem 0;
 }
 
-/* glass navbar everywhere */
+/* ===== Glass navbar everywhere ===== */
 .app-navbar {
     background: rgba(255,255,255,0.08) !important;
     backdrop-filter: blur(14px);
@@ -50,18 +51,19 @@ body {
     border-bottom: 1px solid rgba(255,255,255,0.15) !important;
 }
 
-    /* navbar text */
     .app-navbar .navbar-brand,
     .app-navbar .nav-link {
         color: rgba(255,255,255,0.92) !important;
+        font-weight: 600;
     }
 
         .app-navbar .nav-link:hover {
             color: #ffffff !important;
-            text-decoration: underline;
+            text-decoration: none;
+            
         }
 
-/* footer glass too */
+/* ===== footer glass ===== */
 footer.footer {
     background: rgba(255,255,255,0.06);
     border-top: 1px solid rgba(255,255,255,0.12) !important;
@@ -76,3 +78,155 @@ footer.footer {
         footer.footer a:hover {
             color: #fff !important;
         }
+
+/* ===== Reusable Glass Card ===== */
+.glass-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 22px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    padding: 1.25rem;
+    color: white;
+}
+
+/* ===== Pills / Badges ===== */
+.pill {
+    font-size: .78rem;
+    font-weight: 800;
+    border-radius: 999px;
+    padding: .25rem .55rem;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.16);
+    color: rgba(255,255,255,0.92);
+}
+
+    .pill.ghost {
+        background: rgba(255,255,255,0.08);
+    }
+
+/* ===== Printer Glass Cards ===== */
+.printer-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 22px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    padding: 1rem;
+    color: white;
+    transition: transform .18s ease, box-shadow .18s ease;
+    /* Центриране на съдържанието */
+    text-align: center;
+}
+
+    .printer-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+    }
+
+/* Image - same format for all, show whole image */
+.printer-img {
+    width: 100%;
+    height: 220px;
+    display: block;
+    object-fit: contain;
+    object-position: center;
+    background: rgba(0,0,0,0.35);
+    border-radius: 14px;
+    margin-bottom: 12px;
+    padding: 10px;
+}
+
+/* Header (title + AMS pill centered) */
+.printer-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    flex-wrap: wrap;
+    width: 100%;
+    text-align: center;
+}
+
+.printer-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 0;
+    text-align: center;
+}
+
+
+.printer-meta {
+    opacity: .9;
+    margin-bottom: .35rem;
+}
+
+/* Make whole card clickable */
+.printer-card-link {
+    cursor: pointer;
+}
+
+/* Actions align center */
+.printer-actions {
+    display: flex;
+    justify-content: center;
+}
+
+    /* ===== Login-style Buttons inside cards ===== */
+    .printer-actions .btn {
+        border-radius: 12px;
+        font-weight: 800;
+        padding: 6px 14px;
+        border: none;
+        color: white;
+        background: linear-gradient(135deg, #6a8cff, #ff6aa2);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+        transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+    }
+
+        .printer-actions .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.55);
+            filter: brightness(1.1);
+        }
+
+    /* Override for edit/delete */
+    .printer-actions .btn-warning {
+        background: linear-gradient(135deg, #ffc107, #ff9800);
+        color: #111;
+    }
+
+    .printer-actions .btn-danger {
+        background: linear-gradient(135deg, #ff5f6d, #ff0000);
+    }
+
+/* ===== Details page image ===== */
+.details-image-wrap {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(0,0,0,0.35);
+}
+
+.details-img {
+    width: 100%;
+    height: 460px;
+    display: block;
+    object-fit: contain;
+    object-position: center;
+    padding: 14px;
+}
+
+.details-desc {
+    overflow-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.6;
+    font-size: 1.05rem;
+    max-width: 100%;
+}
+
+
+

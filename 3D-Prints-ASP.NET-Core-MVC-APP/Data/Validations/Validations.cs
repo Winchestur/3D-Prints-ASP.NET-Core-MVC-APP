@@ -1,4 +1,4 @@
-﻿namespace _3D_Prints_APP.Data.Validations
+﻿namespace _3DPrintsAPP.Data.Validations
 {
     public static class Validations
     {

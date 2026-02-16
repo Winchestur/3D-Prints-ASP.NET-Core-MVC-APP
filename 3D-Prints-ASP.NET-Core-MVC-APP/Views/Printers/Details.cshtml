@@ -1,0 +1,53 @@
+﻿@model _3DPrintsAPP.ViewModels.PrinterViewModel
+
+@{
+    ViewData["Title"] = "Printer Details";
+}
+
+<div class="container">
+    <div class="glass-card">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+            <div>
+                <h2 class="mb-0">@Model.ModelName</h2>
+                <div class="text-muted" style="opacity:.85;">
+                    Uploaded: @Model.UploadedTime.ToString("dd.MM.yyyy")
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <a asp-action="Index" class="btn btn-secondary">Back</a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Image -->
+            <div class="col-lg-7">
+                <div class="details-image-wrap">
+                    <img src="@Model.UploadPhoto"
+                         alt="@Model.ModelName"
+                         class="details-img" />
+                </div>
+            </div>
+
+            <!-- Info -->
+            <div class="col-lg-5">
+                <div class="glass-card" style="padding:1.1rem;">
+                    <div class="d-flex gap-2 flex-wrap mb-3">
+                        <span class="pill">Printer</span>
+                        <span class="pill ghost">Nozzle: @Model.NozzleDiameter mm</span>
+                        <span class="pill ghost">@(Model.AMS ? "AMS: Yes" : "AMS: No")</span>
+                    </div>
+
+                    <h4 class="mb-2">Description</h4>
+                    <p class="details-desc">
+                        @Model.Description
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using _3D_Prints_APP.Data.Models;
+using _3DPrintsAPP.Data.Models;
 
-namespace _3D_Prints_APP.Data
+namespace _3DPrintsAPP.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

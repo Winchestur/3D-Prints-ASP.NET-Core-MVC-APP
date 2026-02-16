@@ -1,0 +1,51 @@
+@model IEnumerable<PrinterViewModel>
+
+@{
+    ViewData["Title"] = "Printers";
+}
+
+<div class="container">
+    <div class="glass-card">
+
+        <div class="printer-header">
+
+            <h2>My Printers</h2>
+
+            <a asp-action="Create" class="btn btn-success">
+                Add New Printer
+            </a>
+        </div>
+
+        <div class="row g-4">
+
+            @foreach (var p in Model)
+            {
+                <div class="col-md-4">
+
+                    <!-- CLICKABLE CARD -->
+                    <div class="printer-card printer-card-link"
+                         onclick="window.location='@Url.Action("Details", "Printers", new { id = p.Id })'">
+
+                        <img src="@p.UploadPhoto"
+                             class="printer-img"
+                             alt="@p.ModelName" />
+
+                        <div class="d-flex justify-content- align-items-center mt-2">
+                            <div class="printer-title">@p.ModelName</div>
+
+                            <span class="pill ghost">
+                                @(p.AMS ? "AMS" : "No AMS")
+                            </span>
+                        </div>
+
+                        <p class="printer-meta">
+                            Uploaded: @p.UploadedTime.ToShortDateString()
+                        </p>
+
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

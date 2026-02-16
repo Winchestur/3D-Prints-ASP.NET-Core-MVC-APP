@@ -1,4 +1,4 @@
-namespace _3D_Prints_APP.Models
+namespace _3DPrintsAPP.ViewModels
 {
     public class ErrorViewModel
     {
