@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using _3DPrintsAPP.Data.Enums;
 using static _3DPrintsAPP.Data.Validations.Validations;
 
-namespace _3DPrintsAPP.ViewModels
+namespace _3DPrintsAPP.ViewModels.Filaments
 {
     public class FilamentCreateEditViewModel
     {

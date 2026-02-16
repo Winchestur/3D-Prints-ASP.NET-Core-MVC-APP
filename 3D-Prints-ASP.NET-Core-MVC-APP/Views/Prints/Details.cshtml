@@ -1,8 +1,7 @@
-﻿@using _3DPrintsAPP.ViewModels.Printers
-@model PrinterViewModel
+﻿@model _3DPrintsAPP.ViewModels.PrintViewModel
 
 @{
-    ViewData["Title"] = "Printer Details";
+    ViewData["Title"] = "Print Details";
 }
 
 <div class="container">
@@ -10,9 +9,9 @@
 
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
             <div>
-                <h2 class="mb-0">@Model.ModelName</h2>
+                <h2 class="mb-0">@Model.Title</h2>
                 <div class="text-muted" style="opacity:.85;">
-                    Uploaded: @Model.UploadedTime.ToString("dd.MM.yyyy")
+                    Printer: @Model.PrinterModelName • Uploaded: @Model.UploadedTime.ToString("dd.MM.yyyy")
                 </div>
             </div>
 
@@ -28,7 +27,7 @@
             <div class="col-lg-7">
                 <div class="details-image-wrap">
                     <img src="@Model.UploadPhoto"
-                         alt="@Model.ModelName"
+                         alt="@Model.Title"
                          class="details-img" />
                 </div>
             </div>
@@ -36,16 +35,31 @@
             <!-- Info -->
             <div class="col-lg-5">
                 <div class="glass-card" style="padding:1.1rem;">
+
                     <div class="d-flex gap-2 flex-wrap mb-3">
-                        <span class="pill">Printer</span>
-                        <span class="pill ghost">Nozzle: @Model.NozzleDiameter mm</span>
-                        <span class="pill ghost">@(Model.AMS ? "AMS: Yes" : "AMS: No")</span>
+                        <span class="pill">Print</span>
+                        <span class="pill ghost">Time: @Model.PrintTime</span>
+                        <span class="pill ghost">@Model.PrinterModelName</span>
                     </div>
 
                     <h4 class="mb-2">Description</h4>
-                    <p class="details-desc">
-                        @Model.Description
-                    </p>
+                    <p class="details-desc">@Model.Description</p>
+
+                    <h4 class="mt-3 mb-2">Filaments</h4>
+                    <div class="d-flex gap-2 flex-wrap">
+                        @if (Model.Filaments != null && Model.Filaments.Any())
+                        {
+                            foreach (var f in Model.Filaments)
+                            {
+                                <span class="pill ghost">@f</span>
+                            }
+                        }
+                        else
+                        {
+                            <span style="opacity:.8;">No filaments selected.</span>
+                        }
+                    </div>
+
                 </div>
             </div>
         </div>

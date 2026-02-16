@@ -1,0 +1,65 @@
+﻿@model _3DPrintsAPP.ViewModels.PrintCreateEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Print";
+}
+
+<div class="container">
+    <div class="glass-card">
+        <h2>Edit Print</h2>
+
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Print Time</label>
+                <input asp-for="PrintTime" class="form-control" type="time" />
+                <span asp-validation-for="PrintTime" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Photo URL</label>
+                <input asp-for="UploadPhoto" class="form-control" />
+                <span asp-validation-for="UploadPhoto" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Printer</label>
+                <select asp-for="PrinterId" class="form-select" asp-items="Model.PrinterOptions"></select>
+                <span asp-validation-for="PrinterId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Filaments (select one or more)</label>
+                <select asp-for="SelectedFilamentIds"
+                        class="form-select"
+                        asp-items="Model.FilamentOptions"
+                        multiple
+                        size="8">
+                </select>
+                <span asp-validation-for="SelectedFilamentIds" class="text-danger"></span>
+            </div>
+
+            <div class="mt-3 d-flex gap-2">
+                <button type="submit" class="btn btn-success">Save</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

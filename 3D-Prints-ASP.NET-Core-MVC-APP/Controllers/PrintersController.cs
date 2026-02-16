@@ -1,6 +1,6 @@
 ﻿using _3DPrintsAPP.Data;
 using _3DPrintsAPP.Data.Models;
-using _3DPrintsAPP.ViewModels;
+using _3DPrintsAPP.ViewModels.Printers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

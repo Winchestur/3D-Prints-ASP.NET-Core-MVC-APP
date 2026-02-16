@@ -33,8 +33,6 @@ namespace _3DPrintsAPP.Data.Models
         [ForeignKey(nameof(Printer))]
         public int PrinterId { get; set; }
         public virtual Printer? Printer { get; set; }
-
-        // Many-to-many join entries to Filaments (via PrintFilament)
         public virtual ICollection<PrintFilament> PrintFilaments { get; set; } = new HashSet<PrintFilament>();
     }
 }

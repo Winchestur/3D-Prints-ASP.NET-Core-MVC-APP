@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using _3DPrintsAPP.Data;
 using _3DPrintsAPP.Data.Enums;
 using _3DPrintsAPP.Data.Models;
-using _3DPrintsAPP.ViewModels;
+using _3DPrintsAPP.ViewModels.Filaments;
 
 namespace _3DPrintsAPP.Controllers
 {

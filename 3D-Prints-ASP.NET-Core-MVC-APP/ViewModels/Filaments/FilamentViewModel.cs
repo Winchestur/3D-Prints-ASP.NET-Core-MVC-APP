@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using static _3DPrintsAPP.Data.Validations.Validations;
 
-namespace _3DPrintsAPP.ViewModels
+namespace _3DPrintsAPP.ViewModels.Filaments
 {
     public class FilamentViewModel
     {

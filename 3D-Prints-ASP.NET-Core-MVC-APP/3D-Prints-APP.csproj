@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-3D-Prints-APP-2cb98bae-5a30-4d14-916e-3a0bd068c161</UserSecretsId>
-    <RootNamespace>_3D-PrintsAPP</RootNamespace>
+    <RootNamespace>_3DPrintsAPP</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
