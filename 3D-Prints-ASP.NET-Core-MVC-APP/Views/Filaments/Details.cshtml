@@ -1,0 +1,37 @@
+﻿@model _3DPrintsAPP.ViewModels.FilamentViewModel
+
+@{
+    ViewData["Title"] = "Filament Details";
+}
+
+<div class="container">
+    <div class="glass-card">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+            <div>
+                <h2 class="mb-0">@Model.Brand</h2>
+                <div style="opacity:.85">Printer: @Model.PrinterModelName</div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <a asp-action="Index" class="btn btn-secondary">Back</a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+
+        <div class="glass-card" style="padding:1.1rem;">
+            <div class="d-flex gap-2 flex-wrap mb-3">
+                <span class="pill">Filament</span>
+                <span class="pill ghost">@Model.Material</span>
+                <span class="pill ghost">@Model.FilamentColor</span>
+                <span class="pill ghost">Diameter: @Model.Diameter mm</span>
+            </div>
+
+            <div class="filament-meta">
+                <strong>Used with printer:</strong> @Model.PrinterModelName
+            </div>
+        </div>
+
+    </div>
+</div>

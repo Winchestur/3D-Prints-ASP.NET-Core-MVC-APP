@@ -1,0 +1,41 @@
+﻿@model _3DPrintsAPP.ViewModels.FilamentCreateEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Filament";
+}
+
+<div class="container">
+    <div class="glass-card">
+        <h2>Edit Filament</h2>
+
+        <form asp-action="Edit" method="post">
+            <div class="mb-3">
+                <label class="form-label">Brand</label>
+                <select asp-for="Brand" class="form-select" asp-items="Model.BrandOptions"></select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Material</label>
+                <select asp-for="Material" class="form-select" asp-items="Model.MaterialOptions"></select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Color</label>
+                <select asp-for="FilamentColor" class="form-select" asp-items="Model.ColorOptions"></select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Diameter (mm)</label>
+                <input asp-for="Diameter" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Printer</label>
+                <select asp-for="PrinterId" class="form-select" asp-items="Model.PrinterOptions"></select>
+            </div>
+
+            <button type="submit" class="btn btn-warning">Save</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

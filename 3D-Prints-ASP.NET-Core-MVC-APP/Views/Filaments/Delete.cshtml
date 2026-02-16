@@ -1,0 +1,33 @@
+﻿@model _3DPrintsAPP.ViewModels.FilamentViewModel
+
+@{
+    ViewData["Title"] = "Delete Filament";
+}
+
+<div class="container">
+    <div class="glass-card text-center">
+        <h2>Delete Filament</h2>
+
+        <div class="glass-card mt-3" style="padding:1rem;">
+            <div class="filament-title">@Model.Brand</div>
+
+            <div class="d-flex justify-content-center gap-2 flex-wrap mt-2">
+                <span class="pill ghost">@Model.Material</span>
+                <span class="pill ghost">@Model.FilamentColor</span>
+                <span class="pill ghost">@Model.Diameter mm</span>
+            </div>
+
+            <div class="mt-2" style="opacity:.85;">
+                Printer: <strong>@Model.PrinterModelName</strong>
+            </div>
+        </div>
+
+        <h5 class="text-danger mt-3">Are you sure you want to delete it?</h5>
+
+        <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="mt-3">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<_3DPrintsAPP.ViewModels.FilamentViewModel>
+
+@{
+    ViewData["Title"] = "Filaments";
+}
+
+<div class="container">
+    <div class="glass-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>My Filaments</h2>
+
+            <a asp-action="Create" class="btn btn-success">
+                Add New Filament
+            </a>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var f in Model)
+            {
+                <div class="col-md-4">
+                    <div class="filament-card filament-card-link"
+                         onclick="window.location='@Url.Action("Details", "Filaments", new { id = f.Id })'">
+
+                        <div class="filament-title">@f.Brand</div>
+
+                        <div class="d-flex justify-content-center gap-2 flex-wrap mb-2">
+                            <span class="pill ghost">@f.Material</span>
+                            <span class="pill ghost">@f.FilamentColor</span>
+                            <span class="pill ghost">@f.Diameter mm</span>
+                        </div>
+
+                        <div class="filament-meta">
+                            <strong>Printer:</strong> @f.PrinterModelName
+                        </div>
+
+                        <div class="printer-actions d-flex gap-2 mt-3"
+                             onclick="event.stopPropagation();">
+                            <a asp-action="Edit" asp-route-id="@f.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@f.Id" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+</div>

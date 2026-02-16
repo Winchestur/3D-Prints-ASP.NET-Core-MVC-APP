@@ -60,7 +60,6 @@ body {
         .app-navbar .nav-link:hover {
             color: #ffffff !important;
             text-decoration: none;
-            
         }
 
 /* ===== footer glass ===== */
@@ -117,7 +116,6 @@ footer.footer {
     padding: 1rem;
     color: white;
     transition: transform .18s ease, box-shadow .18s ease;
-    /* Центриране на съдържанието */
     text-align: center;
 }
 
@@ -156,7 +154,6 @@ footer.footer {
     margin: 0;
     text-align: center;
 }
-
 
 .printer-meta {
     opacity: .9;
@@ -228,5 +225,38 @@ footer.footer {
     max-width: 100%;
 }
 
+/* =========================================================
+   ===== Filament Cards (ADDED) =====
+   ========================================================= */
 
+.filament-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 22px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    padding: 1rem;
+    color: white;
+    transition: transform .18s ease, box-shadow .18s ease;
+    text-align: center;
+}
 
+    .filament-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+    }
+
+.filament-card-link {
+    cursor: pointer;
+}
+
+.filament-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: .4rem;
+}
+
+.filament-meta {
+    opacity: .9;
+}
