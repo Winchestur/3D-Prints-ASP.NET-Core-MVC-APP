@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using _3DPrintsAPP.Data.Enums;
+using static _3DPrintsAPP.Data.Validations.Validations;
 
 namespace _3DPrintsAPP.ViewModels
 {
@@ -16,7 +17,14 @@ namespace _3DPrintsAPP.ViewModels
         public Colors FilamentColor { get; set; }
 
         [Required]
+        [StringLength(MaxImgUrl, MinimumLength = MinImgUrl)]
+        public string UploadPhoto { get; set; } = null!;
 
+        [Required]
+        [Range(MinWeight, MaxWeight)]
+        public double WeightKg { get; set; }
+
+        [Required]
         public decimal Diameter { get; set; }
 
         [Required]

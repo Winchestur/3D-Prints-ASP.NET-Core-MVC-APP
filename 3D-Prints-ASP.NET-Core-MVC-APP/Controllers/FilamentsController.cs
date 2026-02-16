@@ -23,15 +23,17 @@ namespace _3DPrintsAPP.Controllers
             ICollection<FilamentViewModel> filaments = _logger
                 .Filaments
                 .Include(f => f.Printer)
-                .Select(f => new FilamentViewModel
+                .Select(filament => new FilamentViewModel
                 {
-                    Id = f.Id,
-                    Brand = f.Brand,
-                    Material = f.Material,
-                    FilamentColor = f.FilamentColor,
-                    Diameter = f.Diameter,
-                    PrinterId = f.PrinterId,
-                    PrinterModelName = f.Printer.ModelName!
+                    Id = filament.Id,
+                    Brand = filament.Brand,
+                    Material = filament.Material,
+                    FilamentColor = filament.FilamentColor,
+                    UploadPhoto = filament.UploadPhoto,
+                    WeightKg = filament.WeightKG,
+                    Diameter = filament.Diameter,
+                    PrinterId = filament.PrinterId,
+                    PrinterModelName = filament.Printer.ModelName!
                 })
                 .ToList();
 
@@ -57,6 +59,8 @@ namespace _3DPrintsAPP.Controllers
                 Brand = filament.Brand,
                 Material = filament.Material,
                 FilamentColor = filament.FilamentColor,
+                UploadPhoto = filament.UploadPhoto,
+                WeightKg = filament.WeightKG,
                 Diameter = filament.Diameter,
                 PrinterId = filament.PrinterId,
                 PrinterModelName = filament.Printer.ModelName!
@@ -87,6 +91,8 @@ namespace _3DPrintsAPP.Controllers
                 Brand = model.Brand,
                 Material = model.Material,
                 FilamentColor = model.FilamentColor,
+                UploadPhoto = model.UploadPhoto,
+                WeightKG = model.WeightKg,
                 Diameter = model.Diameter,
                 PrinterId = model.PrinterId
             };
@@ -114,6 +120,8 @@ namespace _3DPrintsAPP.Controllers
                 Brand = filament.Brand,
                 Material = filament.Material,
                 FilamentColor = filament.FilamentColor,
+                UploadPhoto = filament.UploadPhoto,
+                WeightKg = filament.WeightKG,
                 Diameter = filament.Diameter,
                 PrinterId = filament.PrinterId
             };
@@ -143,6 +151,8 @@ namespace _3DPrintsAPP.Controllers
             filament.Brand = model.Brand;
             filament.Material = model.Material;
             filament.FilamentColor = model.FilamentColor;
+            filament.UploadPhoto = model.UploadPhoto;
+            filament.WeightKG = model.WeightKg;
             filament.Diameter = model.Diameter;
             filament.PrinterId = model.PrinterId;
 
@@ -163,18 +173,20 @@ namespace _3DPrintsAPP.Controllers
                 return NotFound();
             }
 
-            FilamentViewModel vm = new FilamentViewModel
+            FilamentViewModel viewModel = new FilamentViewModel
             {
                 Id = filament.Id,
                 Brand = filament.Brand,
                 Material = filament.Material,
                 FilamentColor = filament.FilamentColor,
+                UploadPhoto = filament.UploadPhoto,
+                WeightKg = filament.WeightKG,
                 Diameter = filament.Diameter,
                 PrinterId = filament.PrinterId,
                 PrinterModelName = filament.Printer.ModelName!
             };
 
-            return View(vm);
+            return View(viewModel);
         }
 
         [HttpPost, ActionName("Delete")]

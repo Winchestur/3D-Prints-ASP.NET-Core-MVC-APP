@@ -8,6 +8,10 @@
     <div class="glass-card text-center">
         <h2>Delete Filament</h2>
 
+        <img src="@Model.UploadPhoto"
+             class="printer-img"
+             alt="@Model.Brand" />
+
         <div class="glass-card mt-3" style="padding:1rem;">
             <div class="filament-title">@Model.Brand</div>
 
@@ -15,6 +19,7 @@
                 <span class="pill ghost">@Model.Material</span>
                 <span class="pill ghost">@Model.FilamentColor</span>
                 <span class="pill ghost">@Model.Diameter mm</span>
+                <span class="pill">@Model.WeightKg kg</span>
             </div>
 
             <div class="mt-2" style="opacity:.85;">

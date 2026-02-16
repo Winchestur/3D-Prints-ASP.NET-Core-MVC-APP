@@ -17,6 +17,7 @@ namespace _3DPrintsAPP.ViewModels
         public string Description { get; set; } = null!;
 
         [Required]
+        [StringLength(MaxImgUrl, MinimumLength = MinImgUrl)]
         public string UploadPhoto { get; set; } = null!;
 
         public bool AMS { get; set; }

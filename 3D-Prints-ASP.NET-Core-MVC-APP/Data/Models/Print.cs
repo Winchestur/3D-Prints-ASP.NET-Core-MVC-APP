@@ -23,6 +23,7 @@ namespace _3DPrintsAPP.Data.Models
         public TimeOnly PrintTime { get; set; }
 
         [Required]
+        [StringLength(MaxImgUrl)]
         public string? UploadPhoto { get; set; }
 
         [Required]
