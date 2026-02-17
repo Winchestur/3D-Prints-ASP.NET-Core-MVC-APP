@@ -1,8 +1,3 @@
----
-title: 3D-Prints-ASP.NET-Core-MVC-APP
-
----
-
 # 3D-Prints-ASP.NET-Core-MVC-Application
 
 
