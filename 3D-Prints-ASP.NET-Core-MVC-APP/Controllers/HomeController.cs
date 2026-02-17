@@ -1,30 +1,43 @@
-using System.Diagnostics;
-using _3DPrintsAPP.Data.Models;
-using _3DPrintsAPP.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using _3DPrintsAPP.Data;
+using _3DPrintsAPP.ViewModels;
 
 namespace _3DPrintsAPP.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext logger)
         {
             _logger = logger;
         }
 
+        [Authorize]
+        [HttpGet]
         public IActionResult Index()
         {
-            return View();
-        }
+            var prints = _logger.Prints
+                .Include(p => p.Printer)
+                .OrderByDescending(p => p.UploadedTime)
+                .Take(9)
+                .Select(p => new PrintViewModel
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Description = p.Description!,
+                    PrintTime = p.PrintTime,
+                    UploadPhoto = p.UploadPhoto!,
+                    UploadedTime = p.UploadedTime,
+                    PrinterId = p.PrinterId,
+                    PrinterModelName = p.Printer!.ModelName!,
+                    Filaments = new List<string>()
+                })
+                .ToList();
 
-
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(prints);
         }
     }
 }

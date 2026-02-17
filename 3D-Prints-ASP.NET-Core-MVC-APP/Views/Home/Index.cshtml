@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<_3DPrintsAPP.ViewModels.PrintViewModel>
+
+@{
     ViewData["Title"] = "Home";
 }
 
@@ -7,6 +9,8 @@
 <section class="bl-hero">
     <div class="container">
         <div class="row align-items-center g-4">
+
+            <!-- LEFT -->
             <div class="col-lg-7">
                 <div class="bl-badge mb-3">
                     <span class="dot"></span>
@@ -20,119 +24,145 @@
                 </p>
 
                 <div class="d-flex flex-wrap gap-2 mt-4">
+
                     @if (User?.Identity?.IsAuthenticated == true)
                     {
-                        <a class="btn btn-light px-4" asp-controller="Prints" asp-action="Index">Explore Prints</a>
-                        <a class="btn btn-outline-light px-4" asp-controller="Printers" asp-action="Index">Printers</a>
-                        <a class="btn btn-outline-light px-4" asp-controller="Filaments" asp-action="Index">Filaments</a>
+                        <a class="btn btn-light px-4"
+                           asp-controller="Prints"
+                           asp-action="Index">Explore Prints</a>
+
+                        <a class="btn btn-outline-light px-4"
+                           asp-controller="Printers"
+                           asp-action="Index">Printers</a>
+
+                        <a class="btn btn-outline-light px-4"
+                           asp-controller="Filaments"
+                           asp-action="Index">Filaments</a>
                     }
                     else
                     {
-                        <a class="btn btn-light px-4" asp-area="Identity" asp-page="/Account/Register">Get started</a>
-                        <a class="btn btn-outline-light px-4" asp-area="Identity" asp-page="/Account/Login">Sign in</a>
-                    }
-                </div>
+                        <a class="btn btn-light px-4"
+                           asp-area="Identity"
+                           asp-page="/Account/Register">Get started</a>
 
-                <div class="mt-4 d-flex gap-2 flex-wrap">
-                    <span class="pill ghost" style="border:1px solid rgba(255,255,255,.18); color: rgba(255,255,255,.8); background: rgba(255,255,255,.06);">Printers</span>
-                    <span class="pill ghost" style="border:1px solid rgba(255,255,255,.18); color: rgba(255,255,255,.8); background: rgba(255,255,255,.06);">Filaments</span>
-                    <span class="pill ghost" style="border:1px solid rgba(255,255,255,.18); color: rgba(255,255,255,.8); background: rgba(255,255,255,.06);">Prints</span>
+                        <a class="btn btn-outline-light px-4"
+                           asp-area="Identity"
+                           asp-page="/Account/Login">Sign in</a>
+                    }
                 </div>
             </div>
 
+            <!-- RIGHT -->
             <div class="col-lg-5">
                 <div class="bl-hero-card">
                     <div class="bl-hero-card__img">
-                        <img src="~/images/hero.jpg" alt="3D prints" />
+                        <img src="~/images/Bambu.jpg" alt="3D prints" />
                     </div>
                     <div class="bl-hero-card__body">
                         <div class="bl-hero-card__title">Featured utility</div>
-                        <div class="bl-hero-card__desc">Add your best prints and show them as cards like Bambu inspirations.</div>
+                        <div class="bl-hero-card__desc">
+                             Best printer for 2026
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </section>
 
+
+<!-- TOOLBAR -->
 <div class="container">
     <div class="bl-toolbar">
+
         <div class="bl-tabs">
             <button type="button" class="bl-tab active" data-filter="all">All</button>
-            <button type="button" class="bl-tab" data-filter="organizer">Organizers</button>
-            <button type="button" class="bl-tab" data-filter="tools">Tools</button>
-            <button type="button" class="bl-tab" data-filter="mount">Mounts</button>
-            <button type="button" class="bl-tab" data-filter="storage">Storage</button>
         </div>
 
         <div class="bl-search">
             <span class="bl-search__icon">⌕</span>
             <input id="searchBox" class="form-control" placeholder="Search inspirations..." />
         </div>
+
     </div>
 
+
+    <!-- GRID -->
     <div id="grid" class="bl-grid">
-        <a class="bl-card" asp-controller="Prints" asp-action="Index" data-tags="organizer storage utility">
-            <div class="bl-card__thumb">
-                <img src="~/images/card1.jpg" alt="Organizer" />
-            </div>
-            <div class="bl-card__body">
-                <div class="bl-card__meta">
-                    <span class="pill">Utility</span>
-                    <span class="pill ghost">Organizers</span>
-                </div>
-                <div class="bl-card__title">Desk Organizer</div>
-                <div class="bl-card__desc">Perfect for nozzles, tools and small parts.</div>
-            </div>
-        </a>
 
-        <a class="bl-card" asp-controller="Printers" asp-action="Index" data-tags="tools printer setup">
-            <div class="bl-card__thumb">
-                <img src="~/images/card2.jpg" alt="Printers" />
-            </div>
-            <div class="bl-card__body">
-                <div class="bl-card__meta">
-                    <span class="pill">Setup</span>
-                    <span class="pill ghost">Tools</span>
-                </div>
-                <div class="bl-card__title">My Printers</div>
-                <div class="bl-card__desc">Models, nozzle size, AMS support and notes.</div>
-            </div>
-        </a>
+        @if (User?.Identity?.IsAuthenticated == true && Model != null && Model.Any())
+        {
+            @foreach (var p in Model)
+            {
+                <a class="bl-card"
+                   asp-controller="Prints"
+                   asp-action="Details"
+                   asp-route-id="@p.Id"
+                   data-tags="utility print">
 
-        <a class="bl-card" asp-controller="Filaments" asp-action="Index" data-tags="storage filament pla petg tpu abs">
-            <div class="bl-card__thumb">
-                <img src="~/images/card3.jpg" alt="Filaments" />
-            </div>
-            <div class="bl-card__body">
-                <div class="bl-card__meta">
-                    <span class="pill">Materials</span>
-                    <span class="pill ghost">Storage</span>
-                </div>
-                <div class="bl-card__title">Filament Library</div>
-                <div class="bl-card__desc">Brands, materials, colors, diameter.</div>
-            </div>
-        </a>
+                    <div class="bl-card__thumb">
+                        <img src="@p.UploadPhoto" alt="@p.Title" />
+                    </div>
 
-        <a class="bl-card" asp-controller="Prints" asp-action="Index" data-tags="mount tools utility">
-            <div class="bl-card__thumb">
-                <img src="~/images/card4.jpg" alt="Mounts" />
-            </div>
-            <div class="bl-card__body">
-                <div class="bl-card__meta">
-                    <span class="pill">Utility</span>
-                    <span class="pill ghost">Mounts</span>
+                    <div class="bl-card__body">
+
+                        <div class="bl-card__meta">
+                            <span class="pill">Print</span>
+                            <span class="pill ghost">@p.PrinterModelName</span>
+                        </div>
+
+                        <div class="bl-card__title">@p.Title</div>
+
+                        <div class="bl-card__desc">
+                            @p.Description
+                        </div>
+
+                        <div class="bl-card__meta mt-2">
+                            <span class="pill ghost">@p.PrintTime</span>
+                            <span class="pill ghost">@p.UploadedTime.ToShortDateString()</span>
+                        </div>
+
+                    </div>
+                </a>
+            }
+        }
+        else
+        {
+            <!-- Guest fallback -->
+            <a class="bl-card"
+               asp-area="Identity"
+               asp-page="/Account/Login"
+               data-tags="welcome">
+
+                <div class="bl-card__thumb">
+                    <img src="~/images/card1.jpg" alt="Login" />
                 </div>
-                <div class="bl-card__title">Wall Mount</div>
-                <div class="bl-card__desc">Simple mount ideas and quick functional prints.</div>
-            </div>
-        </a>
+
+                <div class="bl-card__body">
+
+                    <div class="bl-card__meta">
+                        <span class="pill">Welcome</span>
+                    </div>
+
+                    <div class="bl-card__title">Sign in to see your prints</div>
+
+                    <div class="bl-card__desc">
+                        Create an account to manage printers, filaments and prints.
+                    </div>
+
+                </div>
+            </a>
+        }
+
     </div>
 </div>
+
 
 @section Scripts {
     <script>
         (function () {
+
             const tabs = document.querySelectorAll('.bl-tab');
             const cards = Array.from(document.querySelectorAll('#grid .bl-card'));
             const searchBox = document.getElementById('searchBox');
@@ -146,6 +176,7 @@
                     const tags = (c.getAttribute('data-tags') || "").toLowerCase();
                     const tabOk = active === "all" || tags.includes(active);
                     const searchOk = !q || tags.includes(q) || c.innerText.toLowerCase().includes(q);
+
                     c.style.display = (tabOk && searchOk) ? "" : "none";
                 });
             }
@@ -160,6 +191,7 @@
             });
 
             searchBox.addEventListener('input', apply);
+
         })();
     </script>
 }

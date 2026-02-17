@@ -3,55 +3,109 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] 3D Prints</title>
+    <title>@ViewData["Title"] - 3D Prints</title>
+
     <script type="importmap"></script>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/_3D_Prints_APP.styles.css" asp-append-version="true" />
+
+    <!-- Bootstrap Icons (за FB/IG икони) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 </head>
-<body>
+
+<body class="app-shell d-flex flex-column min-vh-100">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark app-navbar mb-3"/>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light app-navbar border-bottom box-shadow">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">3D-Prints</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                   
                         @if (User?.Identity?.IsAuthenticated == true)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Printers" asp-action="Index">Printers</a>
+                                <a class="nav-link" asp-controller="Printers" asp-action="Index">Printers</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Filaments" asp-action="Index">Filaments</a>
+                                <a class="nav-link" asp-controller="Filaments" asp-action="Index">Filaments</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Prints" asp-action="Index">Prints</a>
+                                <a class="nav-link" asp-controller="Prints" asp-action="Index">Prints</a>
                             </li>
                         }
                     </ul>
+
                     <partial name="_LoginPartial" />
                 </div>
             </div>
-        </>
+        </nav>
     </header>
-    <main role="main" class="app-main">
+
+    <!-- flex-grow-1 = бутаме footer-а най-долу -->
+    <main role="main" class="container flex-grow-1 py-3 app-main">
         @RenderBody()
     </main>
 
-
-    <footer class="border-top footer text-muted">
+    <footer class="footer mt-auto">
         <div class="container">
-            &copy; 2026 - _3DPrintsAPP - <a asp-area="" asp-controller="Home" asp-action="Contacts">Contacts</a>
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 py-3">
+                <div class="d-flex align-items-center gap-3">
+                    <span class="footer-brand fw-bold">3D-Prints</span>
+                    <span class="footer-muted">© 2026</span>
+                </div>
+
+                <div class="d-flex flex-wrap align-items-center gap-4">
+                    <span class="footer-muted">
+                        <i class="bi bi-telephone-fill me-2"></i> +359 888 123 456
+                    </span>
+
+                    <a class="footer-link" href="https://facebook.com" target="_blank" rel="noopener">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+
+                    <a class="footer-link" href="https://instagram.com" target="_blank" rel="noopener">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                </div>
+
+                <div class="footer-clock" id="footerClock">--.--.----, --:--:--</div>
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        (function () {
+            const el = document.getElementById('footerClock');
+
+            function tick() {
+                const now = new Date();
+                const s = now.toLocaleString('bg-BG', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                el.textContent = s;
+            }
+
+            tick();
+            setInterval(tick, 1000);
+        })();
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

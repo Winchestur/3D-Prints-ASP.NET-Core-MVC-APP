@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using _3DPrintsAPP.Data.Configurations;
 using _3DPrintsAPP.Data.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace _3DPrintsAPP.Data
 {
@@ -35,14 +36,6 @@ namespace _3DPrintsAPP.Data
                 .HasForeignKey(pf => pf.FilamentId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<PrintFilament>()
-                .Property(pf => pf.Cost)
-                .HasPrecision(18, 2);
-
-            modelBuilder.Entity<PrintFilament>()
-                .Property(pf => pf.UsedGrams)
-                .HasPrecision(18, 2);
-
             modelBuilder.Entity<Filament>()
                 .Property(f => f.Diameter)
                 .HasPrecision(18, 2);
@@ -62,6 +55,12 @@ namespace _3DPrintsAPP.Data
                 .WithMany(pr => pr.Prints)
                 .HasForeignKey(p => p.PrinterId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.ApplyConfiguration(new PrinterConfiguration());
+            modelBuilder.ApplyConfiguration(new FilamentConfiguration());
+            modelBuilder.ApplyConfiguration(new PrintConfiguration());
+            modelBuilder.ApplyConfiguration(new PrintFilamentConfiguration());
+
         }
     }
 }

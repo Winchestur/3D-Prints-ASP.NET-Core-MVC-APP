@@ -13,6 +13,4 @@ public class PrintFilament
     [ForeignKey(nameof(Filament))]
     public int FilamentId { get; set; }
     public Filament Filament { get; set; } = null!;
-    public decimal? UsedGrams { get; set; }
-    public decimal Cost { get; set; }
 }
