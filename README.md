@@ -149,25 +149,25 @@ https://localhost:xxxx/
 ### Screenshots
  Example sections:
 
-![Login](https://hackmd.io/_uploads/rJJv06Z_bx.png)
+![Login](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/Login.png)
 
-![register](https://hackmd.io/_uploads/rySPZR-OWg.png)
+![register](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/register.png)
 
-![HomePage1](https://hackmd.io/_uploads/SyPiZRW_bg.png)
+![HomePage1](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/HomePage1.png)
 
-![HomePage2](https://hackmd.io/_uploads/S1ynZCZ_We.png)
+![HomePage2](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/HomePage2.png)
 
-![PrinterIndex](https://hackmd.io/_uploads/S1n3ZRZOZe.png)
+![PrinterIndex](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/PrinterIndex.png)
 
-![AddNewPrinter](https://hackmd.io/_uploads/Byl0bAbObg.png)
+![AddNewPrinter](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/AddNewPrinter.png)
 
-![FilamentDetails](https://hackmd.io/_uploads/H1ORW0b_-g.png)
+![FilamentDetails](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/FilamentDetails.png)
 
-![FilamentDelete](https://hackmd.io/_uploads/HJeyGRb_-e.png)
+![FilamentDelete](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/FilamentDelete.png)
 
-![AddNewPrint](https://hackmd.io/_uploads/r1tyGCWd-x.png)
+![AddNewPrint](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/AddNewPrint.png)
 
-![DBContext](https://hackmd.io/_uploads/BJglzCZdbx.png)
+![DBContext](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/DBContext.png)
 
 ---
 
