@@ -8,16 +8,16 @@ namespace _3DPrintsAPP.Controllers
 {
     public class PrintersController : Controller
     {
-        private readonly ApplicationDbContext? _logger;
-        public PrintersController(ApplicationDbContext? logger)
+        private readonly ApplicationDbContext? dbContext;
+        public PrintersController(ApplicationDbContext? dbContext)
         {
-            _logger = logger;
+            this.dbContext = dbContext;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            List<PrinterViewModel> printers = _logger!
+            List<PrinterViewModel> printers = dbContext!
             .Printers
             .Select(p => new PrinterViewModel
             {
@@ -57,8 +57,8 @@ namespace _3DPrintsAPP.Controllers
                 AMS = model.AMS,
                 UploadedTime = DateTime.Now
             };
-            _logger!.Printers.Add(printer);
-            _logger.SaveChanges();
+            dbContext!.Printers.Add(printer);
+            dbContext.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
@@ -66,7 +66,7 @@ namespace _3DPrintsAPP.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            Printer? printer = _logger?
+            Printer? printer = dbContext?
                 .Printers
                 .Find(id);
 
@@ -95,7 +95,7 @@ namespace _3DPrintsAPP.Controllers
                 return View(model);
             }
 
-            Printer? printer = _logger?
+            Printer? printer = dbContext?
                 .Printers
                 .Find(id);
 
@@ -110,7 +110,7 @@ namespace _3DPrintsAPP.Controllers
             printer.UploadPhoto = model.UploadPhoto;
             printer.AMS = model.AMS;
 
-            _logger.SaveChanges();
+            dbContext.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
@@ -118,7 +118,7 @@ namespace _3DPrintsAPP.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var printer = _logger?
+            var printer = dbContext?
                 .Printers
                 .Find(id);
 
@@ -130,20 +130,20 @@ namespace _3DPrintsAPP.Controllers
             return View(printer);
         }
 
-        [HttpPost]
-        public IActionResult Delete(int id, Printer model)
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeleteConfirmed(int id)
         {
-            Printer? printer = _logger?
-                .Printers
-                .Find(id);
+            var printer = dbContext.Printers
+                .Include(p => p.Filaments)
+                .FirstOrDefault(p => p.Id == id);
 
             if (printer == null)
-            {
                 return NotFound();
-            }
 
-            _logger?.Printers.Remove(printer);
-            _logger?.SaveChanges();
+            dbContext.Filaments.RemoveRange(printer.Filaments);
+            dbContext.Printers.Remove(printer);
+
+            dbContext.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
@@ -151,7 +151,7 @@ namespace _3DPrintsAPP.Controllers
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var printer = _logger?
+            var printer = dbContext?
                 .Printers
                 .Find(id);
 
