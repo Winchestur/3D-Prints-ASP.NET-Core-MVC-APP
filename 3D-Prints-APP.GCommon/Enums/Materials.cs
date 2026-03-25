@@ -1,4 +1,4 @@
-﻿namespace _3DPrintsAPP.Data.Enums
+﻿namespace _3DPrintsAPP.Enums
 {
     public enum Materials
     {

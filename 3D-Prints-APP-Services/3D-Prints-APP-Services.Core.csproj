@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>_3D_Prints_APP_Services</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Contracts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\3D-Prints-APP.Data.Model\3D-Prints-APP.Data.Model.csproj" />
+    <ProjectReference Include="..\3D-Prints-APP.Data\3D-Prints-APP.Data.csproj" />
+    <ProjectReference Include="..\3D-Prints-APP.GCommon\3D-Prints-APP.GCommon.csproj" />
+    <ProjectReference Include="..\3D-Prints-APP.Web.ViewModels\3D-Prints-APP.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

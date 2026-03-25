@@ -1,4 +1,4 @@
-﻿using _3DPrintsAPP.Data.Enums;
+﻿using _3DPrintsAPP.Enums;
 using _3DPrintsAPP.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>_3D_Prints_APP.Data</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Repositories\Contracts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\3D-Prints-APP.Data.Model\3D-Prints-APP.Data.Model.csproj" />
+    <ProjectReference Include="..\3D-Prints-APP.GCommon\3D-Prints-APP.GCommon.csproj" />
+    <ProjectReference Include="..\3D-Prints-APP.Web.ViewModels\3D-Prints-APP.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

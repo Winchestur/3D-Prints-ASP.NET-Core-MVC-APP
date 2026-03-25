@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using _3DPrintsAPP.Data;
-using _3DPrintsAPP.Data.Enums;
+using _3DPrintsAPP.Enums;
 using _3DPrintsAPP.Data.Models;
 using _3DPrintsAPP.ViewModels.Filaments;
 

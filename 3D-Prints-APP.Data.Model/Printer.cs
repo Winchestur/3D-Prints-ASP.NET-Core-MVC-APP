@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using static _3DPrintsAPP.Data.Validations.Validations;
-using _3DPrintsAPP.Data.Enums;
+using _3DPrintsAPP.Enums;
 
 namespace _3DPrintsAPP.Data.Models
 {

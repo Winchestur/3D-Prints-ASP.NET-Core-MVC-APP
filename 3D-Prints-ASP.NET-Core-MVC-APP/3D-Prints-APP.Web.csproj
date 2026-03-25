@@ -22,4 +22,11 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.12" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\3D-Prints-APP-Services\3D-Prints-APP-Services.Core.csproj" />
+    <ProjectReference Include="..\3D-Prints-APP.Data\3D-Prints-APP.Data.csproj" />
+    <ProjectReference Include="..\3D-Prints-APP.GCommon\3D-Prints-APP.GCommon.csproj" />
+    <ProjectReference Include="..\3D-Prints-APP.Web.ViewModels\3D-Prints-APP.Web.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>

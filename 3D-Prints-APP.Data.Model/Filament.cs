@@ -1,4 +1,4 @@
-﻿using _3DPrintsAPP.Data.Enums;
+﻿using _3DPrintsAPP.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static _3DPrintsAPP.Data.Validations.Validations;
