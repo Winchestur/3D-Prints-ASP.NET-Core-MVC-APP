@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\3D-Prints-APP.Data.Model\3D-Prints-APP.Data.Model.csproj" />
     <ProjectReference Include="..\3D-Prints-APP.Data\3D-Prints-APP.Data.csproj" />
     <ProjectReference Include="..\3D-Prints-APP.GCommon\3D-Prints-APP.GCommon.csproj" />

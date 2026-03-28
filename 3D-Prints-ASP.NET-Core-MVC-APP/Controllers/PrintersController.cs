@@ -1,4 +1,5 @@
-﻿using _3DPrintsAPP.Data;
+﻿using _3D_Prints_APP_Services.Contracts;
+using _3DPrintsAPP.Data;
 using _3DPrintsAPP.Data.Models;
 using _3DPrintsAPP.ViewModels.Printers;
 using Microsoft.AspNetCore.Mvc;
@@ -8,29 +9,17 @@ namespace _3DPrintsAPP.Controllers
 {
     public class PrintersController : Controller
     {
-        private readonly ApplicationDbContext? dbContext;
-        public PrintersController(ApplicationDbContext? dbContext)
+        private readonly IPrinterService printerService;
+
+        public PrintersController(IPrinterService printerService)
         {
-            this.dbContext = dbContext;
+            this.printerService = printerService;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<PrinterViewModel> printers = dbContext!
-            .Printers
-            .Select(p => new PrinterViewModel
-            {
-                Id = p.Id,
-                ModelName = p.ModelName!,
-                NozzleDiameter = p.NozzleDiameter,
-                Description = p.Description!,
-                UploadPhoto = p.UploadPhoto!,
-                AMS = p.AMS,
-                UploadedTime = p.UploadedTime
-            })
-            .ToList();
-
+            var printers = await printerService.GetAllPrintersAsync();
             return View(printers);
         }
 
@@ -41,135 +30,84 @@ namespace _3DPrintsAPP.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(PrinterViewModel model)
+        public async Task<IActionResult> Create(PrinterViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            
-            Printer printer = new Printer
-            {
-                ModelName = model.ModelName,
-                NozzleDiameter = model.NozzleDiameter,
-                Description = model.Description,
-                UploadPhoto = model.UploadPhoto,
-                AMS = model.AMS,
-                UploadedTime = DateTime.Now
-            };
-            dbContext!.Printers.Add(printer);
-            dbContext.SaveChanges();
+
+            await printerService.CreatePrinterAsync(model);
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            Printer? printer = dbContext?
-                .Printers
-                .Find(id);
+            var model = await printerService.GetPrinterForEditAsync(id);
 
-            if (printer == null)
+            if (model == null)
             {
                 return NotFound();
             }
-
-            var model = new PrinterCreateEditViewModel
-            {
-                ModelName = printer.ModelName!,
-                NozzleDiameter = printer.NozzleDiameter,
-                Description = printer.Description!,
-                UploadPhoto = printer.UploadPhoto!,
-                AMS = printer.AMS
-            };
 
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, PrinterCreateEditViewModel model)
+        public async Task<IActionResult> Edit(int id, PrinterCreateEditViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            Printer? printer = dbContext?
-                .Printers
-                .Find(id);
+            bool isUpdated = await printerService.UpdatePrinterAsync(id, model);
 
-            if (printer == null)
+            if (!isUpdated)
             {
                 return NotFound();
             }
-
-            printer.ModelName = model.ModelName;
-            printer.NozzleDiameter = model.NozzleDiameter;
-            printer.Description = model.Description;
-            printer.UploadPhoto = model.UploadPhoto;
-            printer.AMS = model.AMS;
-
-            dbContext.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var printer = dbContext?
-                .Printers
-                .Find(id);
+            Printer? printer = await printerService.GetPrinterByIdAsync(id);
 
             if (printer == null)
             {
-               return NotFound();
+                return NotFound();
             }
 
             return View(printer);
         }
 
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var printer = dbContext.Printers
-                .Include(p => p.Filaments)
-                .FirstOrDefault(p => p.Id == id);
+            bool isDeleted = await printerService.DeletePrinterAsync(id);
 
-            if (printer == null)
+            if (!isDeleted)
+            {
                 return NotFound();
-
-            dbContext.Filaments.RemoveRange(printer.Filaments);
-            dbContext.Printers.Remove(printer);
-
-            dbContext.SaveChanges();
+            }
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var printer = dbContext?
-                .Printers
-                .Find(id);
+            var viewModel = await printerService.GetPrinterDetailsAsync(id);
 
-            if (printer == null)
+            if (viewModel == null)
             {
                 return NotFound();
             }
-
-            PrinterViewModel viewModel = new PrinterViewModel
-            {
-                Id = printer.Id,
-                ModelName = printer.ModelName!,
-                NozzleDiameter = printer.NozzleDiameter,
-                Description = printer.Description!,
-                UploadPhoto = printer.UploadPhoto!,
-                AMS = printer.AMS,
-                UploadedTime = printer.UploadedTime
-            };
 
             return View(viewModel);
         }
