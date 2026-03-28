@@ -1,3 +1,7 @@
+using _3D_Prints_APP.Data.Repositories;
+using _3D_Prints_APP.Data.Repositories.Contracts;
+using _3D_Prints_APP_Services;
+using _3D_Prints_APP_Services.Contracts;
 using _3DPrintsAPP.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +16,21 @@ namespace _3DPrintsAPP
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
+            
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddScoped<IPrinterRepository, PrinterRepository>();
+            builder.Services.AddScoped<IPrinterService, PrinterService>();
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+            {
+                ConfigureIdentityOptions(builder.Configuration, options);
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+           
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
@@ -37,17 +50,57 @@ namespace _3DPrintsAPP
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseAuthentication();
+
+            // checks after every request if user exists in Database
+            app.Use(async (context, next) =>
+            {
+                if (context.User.Identity?.IsAuthenticated == true)
+                {
+                    var userManager = context.RequestServices.GetRequiredService<UserManager<IdentityUser>>();
+                    var signInManager = context.RequestServices.GetRequiredService<SignInManager<IdentityUser>>();
+
+                    var user = await userManager.GetUserAsync(context.User);
+
+                    if (user == null)
+                    {
+                        await signInManager.SignOutAsync();
+                    }
+                }
+
+                await next();
+            });
+
             app.UseAuthorization();
 
             app.MapStaticAssets();
+            
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
+            
             app.MapRazorPages()
                .WithStaticAssets();
 
             app.Run();
+        }
+
+        private static void ConfigureIdentityOptions(ConfigurationManager configuration, IdentityOptions options)
+        {
+            options.SignIn.RequireConfirmedAccount =
+                configuration.GetValue<bool>("Identity:RequireConfirmedAccount");
+
+            options.Password.RequireDigit = configuration.GetValue<bool>("Identity:RequireDigit");
+
+            options.Password.RequiredLength = configuration.GetValue<int>("Identity:RequireLength");
+
+            options.Password.RequireUppercase = configuration.GetValue<bool>("Identity:RequireUppercase");
+
+            options.Password.RequireNonAlphanumeric =
+                configuration.GetValue<bool>("Identity:RequireNonAlphanumeric");
+
+            options.Password.RequireLowercase = configuration.GetValue<bool>("Identity:RequireLowercase");
         }
     }
 }
