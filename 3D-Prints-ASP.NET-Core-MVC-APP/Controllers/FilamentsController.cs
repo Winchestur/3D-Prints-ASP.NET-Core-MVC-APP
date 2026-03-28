@@ -1,232 +1,83 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using _3DPrintsAPP.Data;
-using _3DPrintsAPP.Enums;
-using _3DPrintsAPP.Data.Models;
+﻿using _3D_Prints_APP_Services.Contracts;
 using _3DPrintsAPP.ViewModels.Filaments;
+using Microsoft.AspNetCore.Mvc;
 
 namespace _3DPrintsAPP.Controllers
 {
     public class FilamentsController : Controller
     {
-        private readonly ApplicationDbContext _logger;
+        private readonly IFilamentService filamentService;
 
-        public FilamentsController(ApplicationDbContext logger)
+        public FilamentsController(IFilamentService filamentService)
         {
-            _logger = logger;
+            this.filamentService = filamentService;
         }
 
-        [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            ICollection<FilamentViewModel> filaments = _logger
-                .Filaments
-                .Include(f => f.Printer)
-                .Select(filament => new FilamentViewModel
-                {
-                    Id = filament.Id,
-                    Brand = filament.Brand,
-                    Material = filament.Material,
-                    FilamentColor = filament.FilamentColor,
-                    UploadPhoto = filament.UploadPhoto,
-                    WeightKg = filament.WeightKG,
-                    Diameter = filament.Diameter,
-                    PrinterId = filament.PrinterId,
-                    PrinterModelName = filament.Printer.ModelName!
-                })
-                .ToList();
-
+            var filaments = await filamentService.GetAllFilamentsAsync();
             return View(filaments);
         }
 
-        [HttpGet]
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            Filament? filament = _logger
-                .Filaments
-                .Include(x => x.Printer)
-                .FirstOrDefault(x => x.Id == id);
-
-            if (filament == null)
-            {
-                return NotFound();
-            }
-
-            FilamentViewModel viewModel = new FilamentViewModel
-            {
-                Id = filament.Id,
-                Brand = filament.Brand,
-                Material = filament.Material,
-                FilamentColor = filament.FilamentColor,
-                UploadPhoto = filament.UploadPhoto,
-                WeightKg = filament.WeightKG,
-                Diameter = filament.Diameter,
-                PrinterId = filament.PrinterId,
-                PrinterModelName = filament.Printer.ModelName!
-            };
-
-            return View(viewModel);
+            var filament = await filamentService.GetFilamentDetailsAsync(id);
+            if (filament == null) return NotFound();
+            return View(filament);
         }
 
-        [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            FilamentCreateEditViewModel viewModel = new FilamentCreateEditViewModel();
-            FillDropdowns(viewModel);
-            return View(viewModel);
+            var vm = await filamentService.GetCreateViewModelAsync();
+            return View(vm);
         }
 
         [HttpPost]
-        public IActionResult Create(FilamentCreateEditViewModel model)
+        public async Task<IActionResult> Create(FilamentCreateEditViewModel model)
         {
             if (!ModelState.IsValid)
-            {
-                FillDropdowns(model);
-                return View(model);
-            }
+                return View(await filamentService.GetCreateViewModelAsync());
 
-            Filament filament = new Filament
-            {
-                Brand = model.Brand,
-                Material = model.Material,
-                FilamentColor = model.FilamentColor,
-                UploadPhoto = model.UploadPhoto,
-                WeightKG = model.WeightKg,
-                Diameter = model.Diameter,
-                PrinterId = model.PrinterId
-            };
-
-            _logger.Filaments.Add(filament);
-            _logger.SaveChanges();
-
+            await filamentService.CreateFilamentAsync(model);
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            Filament? filament = _logger
-                .Filaments
-                .Find(id);
-
-            if (filament == null)
-            {
-                return NotFound();
-            }
-
-            FilamentCreateEditViewModel viewModel = new FilamentCreateEditViewModel
-            {
-                Brand = filament.Brand,
-                Material = filament.Material,
-                FilamentColor = filament.FilamentColor,
-                UploadPhoto = filament.UploadPhoto,
-                WeightKg = filament.WeightKG,
-                Diameter = filament.Diameter,
-                PrinterId = filament.PrinterId
-            };
-
-            FillDropdowns(viewModel);
-            return View(viewModel);
+            var vm = await filamentService.GetEditViewModelAsync(id);
+            if (vm == null) return NotFound();
+            return View(vm);
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, FilamentCreateEditViewModel model)
+        public async Task<IActionResult> Edit(int id, FilamentCreateEditViewModel model)
         {
             if (!ModelState.IsValid)
-            {
-                FillDropdowns(model);
-                return View(model);
-            }
+                return View(await filamentService.GetEditViewModelAsync(id));
 
-            Filament? filament = _logger
-                .Filaments
-                .Find(id);
-
-            if (filament == null)
-            {
-                return NotFound();
-            }
-
-            filament.Brand = model.Brand;
-            filament.Material = model.Material;
-            filament.FilamentColor = model.FilamentColor;
-            filament.UploadPhoto = model.UploadPhoto;
-            filament.WeightKG = model.WeightKg;
-            filament.Diameter = model.Diameter;
-            filament.PrinterId = model.PrinterId;
-
-            _logger.SaveChanges();
-
+            await filamentService.EditFilamentAsync(id, model);
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            Filament? filament = _logger.Filaments
-                .Include(x => x.Printer)
-                .FirstOrDefault(x => x.Id == id);
-
-            if (filament == null)
-            {
-                return NotFound();
-            }
-
-            FilamentViewModel viewModel = new FilamentViewModel
-            {
-                Id = filament.Id,
-                Brand = filament.Brand,
-                Material = filament.Material,
-                FilamentColor = filament.FilamentColor,
-                UploadPhoto = filament.UploadPhoto,
-                WeightKg = filament.WeightKG,
-                Diameter = filament.Diameter,
-                PrinterId = filament.PrinterId,
-                PrinterModelName = filament.Printer.ModelName!
-            };
-
-            return View(viewModel);
+            var filament = await filamentService.GetFilamentDetailsAsync(id);
+            if (filament == null) return NotFound();
+            return View(filament);
         }
 
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Filament? filament = _logger
-                .Filaments
-                .Find(id);
-
-            if (filament == null)
+            try
+            {
+                await filamentService.DeleteFilamentAsync(id);
+            }
+            catch (KeyNotFoundException)
             {
                 return NotFound();
             }
-
-            _logger.Filaments.Remove(filament);
-            _logger.SaveChanges();
-
             return RedirectToAction(nameof(Index));
-        }
-
-        private void FillDropdowns(FilamentCreateEditViewModel viewModel)
-        {
-            viewModel.BrandOptions = Enum.GetValues(typeof(Brand))
-                .Cast<Brand>()
-                .Select(v => new SelectListItem(v.ToString(), v.ToString()))
-                .ToList();
-
-            viewModel.MaterialOptions = Enum.GetValues(typeof(Materials))
-                .Cast<Materials>()
-                .Select(v => new SelectListItem(v.ToString(), v.ToString()))
-                .ToList();
-
-            viewModel.ColorOptions = Enum.GetValues(typeof(Colors))
-                .Cast<Colors>()
-                .Select(v => new SelectListItem(v.ToString(), v.ToString()))
-                .ToList();
-
-            viewModel.PrinterOptions = _logger.Printers
-                .Select(p => new SelectListItem(p.ModelName!, p.Id.ToString()))
-                .ToList();
         }
     }
 }
