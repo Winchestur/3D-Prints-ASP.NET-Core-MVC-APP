@@ -23,7 +23,8 @@ namespace _3DPrintsAPP.Data.Configurations
                      Description = "Bambu Lab P1S with AMS for multi-color prints.",
                      UploadPhoto = "https://store.bblcdn.com/s7/default/7abb7477d233498b82a02dc93dd069df/P1.jpg",
                      AMS = true,
-                     UploadedTime = new DateTime(2026, 02, 17, 0, 0, 0)
+                     UploadedTime = new DateTime(2026, 02, 17, 0, 0, 0),
+                     UserId = "admin-user-id"
                  },
 
                  new Printer
@@ -34,7 +35,8 @@ namespace _3DPrintsAPP.Data.Configurations
                      Description = "Reliable budget printer for starters and upgrades.",
                      UploadPhoto = "https://m.media-amazon.com/images/I/61CndtGd6wL._AC_UF350,350_QL80_.jpg",
                      AMS = false,
-                     UploadedTime = new DateTime(2026, 02, 17, 0, 0, 0)
+                     UploadedTime = new DateTime(2026, 02, 17, 0, 0, 0),
+                     UserId = "admin-user-id"
                  }
                 );
         }

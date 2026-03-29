@@ -10,12 +10,12 @@ namespace _3D_Prints_APP_Services.Contracts
 {
     public interface IPrinterService
     {
-        Task<List<PrinterViewModel>> GetAllPrintersAsync();
-        Task CreatePrinterAsync(PrinterViewModel model);
-        Task<PrinterCreateEditViewModel?> GetPrinterForEditAsync(int id);
-        Task<bool> UpdatePrinterAsync(int id, PrinterCreateEditViewModel model);
-        Task<Printer?> GetPrinterByIdAsync(int id);
-        Task<bool> DeletePrinterAsync(int id);
-        Task<PrinterViewModel?> GetPrinterDetailsAsync(int id);
+        Task<List<PrinterViewModel>> GetAllPrintersAsync(string userId);
+        Task CreatePrinterAsync(PrinterViewModel model, string userId);
+        Task<PrinterCreateEditViewModel?> GetPrinterForEditAsync(int id, string userId);
+        Task<bool> UpdatePrinterAsync(int id, PrinterCreateEditViewModel model, string userId);
+        Task<Printer?> GetPrinterByIdAsync(int id, string userId);
+        Task<bool> DeletePrinterAsync(int id, string userId);
+        Task<PrinterViewModel?> GetPrinterDetailsAsync(int id, string userId);
     }
 }

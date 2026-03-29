@@ -5,6 +5,7 @@ using _3D_Prints_APP_Services.Contracts;
 using _3DPrintsAPP.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using _3DPrintsAPP.Data.Models;
 
 namespace _3DPrintsAPP
 {
@@ -25,7 +26,13 @@ namespace _3DPrintsAPP
             builder.Services.AddScoped<IPrinterRepository, PrinterRepository>();
             builder.Services.AddScoped<IPrinterService, PrinterService>();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+            builder.Services.AddScoped<IFilamentRepository, FilamentRepository>();
+            builder.Services.AddScoped<IFilamentService, FilamentService>();
+
+            builder.Services.AddScoped<IPrintRepository, PrintRepository>();
+            builder.Services.AddScoped<IPrintService, PrintService>();
+
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 ConfigureIdentityOptions(builder.Configuration, options);
             })
@@ -57,8 +64,8 @@ namespace _3DPrintsAPP
             {
                 if (context.User.Identity?.IsAuthenticated == true)
                 {
-                    var userManager = context.RequestServices.GetRequiredService<UserManager<IdentityUser>>();
-                    var signInManager = context.RequestServices.GetRequiredService<SignInManager<IdentityUser>>();
+                    var userManager = context.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
+                    var signInManager = context.RequestServices.GetRequiredService<SignInManager<ApplicationUser>>();
 
                     var user = await userManager.GetUserAsync(context.User);
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _3DPrintsAPP.Data;
 
@@ -11,9 +12,11 @@ using _3DPrintsAPP.Data;
 namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260329224350_InitialSeedAdminAndPrinters")]
+    partial class InitialSeedAdminAndPrinters
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -286,7 +289,6 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@SITE.COM",
                             NormalizedUserName = "ADMIN@SITE.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMgoypDgbqDzlnw4UlwgU6TYJT73IMHdtY2JV0a668gEYJDfxImXXZQSuODkFJHRWA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "admin-security-stamp",
                             TwoFactorEnabled = false,

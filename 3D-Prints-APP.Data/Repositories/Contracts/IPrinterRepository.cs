@@ -9,12 +9,11 @@ namespace _3D_Prints_APP.Data.Repositories.Contracts
 {
     public interface IPrinterRepository
     {
-        Task<List<Printer>> GetAllAsync();
+        Task<List<Printer>> GetAllAsync(string userId);
         Task AddAsync(Printer printer);
-        Task<Printer?> GetByIdAsync(int id);
+        Task<Printer?> GetByIdAsync(int id, string userId);
         Task SaveChangesAsync();
-
-        Task<Printer?> GetByIdWithFilamentsAsync(int id);
+        Task<Printer?> GetByIdWithFilamentsAsync(int id, string userId);
         Task DeleteAsync(Printer printer);
     }
 }

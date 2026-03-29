@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using static _3DPrintsAPP.Data.Validations.Validations;
 using _3DPrintsAPP.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace _3DPrintsAPP.Data.Models
 {
@@ -27,7 +28,12 @@ namespace _3DPrintsAPP.Data.Models
         [Required]
         public bool AMS { get; set; }
         public DateTime UploadedTime { get; set; }
-        
+
+        [Required]
+        [ForeignKey(nameof(User))]
+        public string UserId { get; set; } = null!;
+        public virtual ApplicationUser User { get; set; } = null!;
+
         public virtual ICollection<Print> Prints { get; set; } 
             = new HashSet<Print>();
         

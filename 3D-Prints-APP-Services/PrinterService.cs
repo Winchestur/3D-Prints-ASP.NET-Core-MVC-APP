@@ -14,9 +14,9 @@ namespace _3D_Prints_APP_Services
             this.printerRepository = printerRepository;
         }
 
-        public async Task<List<PrinterViewModel>> GetAllPrintersAsync()
+        public async Task<List<PrinterViewModel>> GetAllPrintersAsync(string userId)
         {
-            IEnumerable<Printer> printers = await printerRepository.GetAllAsync();
+            IEnumerable<Printer> printers = await printerRepository.GetAllAsync(userId);
 
             return printers
                 .Select(p => new PrinterViewModel
@@ -32,7 +32,7 @@ namespace _3D_Prints_APP_Services
                 .ToList();
         }
 
-        public async Task CreatePrinterAsync(PrinterViewModel model)
+        public async Task CreatePrinterAsync(PrinterViewModel model, string userId)
         {
             Printer printer = new Printer
             {
@@ -41,15 +41,16 @@ namespace _3D_Prints_APP_Services
                 Description = model.Description,
                 UploadPhoto = model.UploadPhoto,
                 AMS = model.AMS,
-                UploadedTime = DateTime.Now
+                UploadedTime = DateTime.Now,
+                UserId = userId
             };
 
             await printerRepository.AddAsync(printer);
         }
 
-        public async Task<PrinterCreateEditViewModel?> GetPrinterForEditAsync(int id)
+        public async Task<PrinterCreateEditViewModel?> GetPrinterForEditAsync(int id, string userId)
         {
-            Printer? printer = await printerRepository.GetByIdAsync(id);
+            Printer? printer = await printerRepository.GetByIdAsync(id, userId);
 
             if (printer == null)
             {
@@ -66,9 +67,9 @@ namespace _3D_Prints_APP_Services
             };
         }
 
-        public async Task<bool> UpdatePrinterAsync(int id, PrinterCreateEditViewModel model)
+        public async Task<bool> UpdatePrinterAsync(int id, PrinterCreateEditViewModel model, string userId)
         {
-            Printer printer = await printerRepository.GetByIdAsync(id);
+            Printer? printer = await printerRepository.GetByIdAsync(id, userId);
 
             if (printer == null)
             {
@@ -86,14 +87,14 @@ namespace _3D_Prints_APP_Services
             return true;
         }
 
-        public async Task<Printer?> GetPrinterByIdAsync(int id)
+        public async Task<Printer?> GetPrinterByIdAsync(int id, string userId)
         {
-            return await printerRepository.GetByIdAsync(id);
+            return await printerRepository.GetByIdAsync(id, userId);
         }
 
-        public async Task<bool> DeletePrinterAsync(int id)
+        public async Task<bool> DeletePrinterAsync(int id, string userId)
         {
-            var printer = await printerRepository.GetByIdWithFilamentsAsync(id);
+            var printer = await printerRepository.GetByIdWithFilamentsAsync(id, userId);
 
             if (printer == null)
             {
@@ -106,9 +107,9 @@ namespace _3D_Prints_APP_Services
             return true;
         }
 
-        public async Task<PrinterViewModel?> GetPrinterDetailsAsync(int id)
+        public async Task<PrinterViewModel?> GetPrinterDetailsAsync(int id, string userId)
         {
-            var printer = await printerRepository.GetByIdAsync(id);
+            var printer = await printerRepository.GetByIdAsync(id, userId);
 
             if (printer == null)
             {

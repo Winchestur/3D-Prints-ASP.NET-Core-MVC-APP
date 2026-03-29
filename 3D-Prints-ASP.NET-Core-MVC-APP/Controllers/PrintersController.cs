@@ -1,12 +1,13 @@
 ﻿using _3D_Prints_APP_Services.Contracts;
-using _3DPrintsAPP.Data;
 using _3DPrintsAPP.Data.Models;
 using _3DPrintsAPP.ViewModels.Printers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace _3DPrintsAPP.Controllers
 {
+    [Authorize]
     public class PrintersController : Controller
     {
         private readonly IPrinterService printerService;
@@ -16,10 +17,15 @@ namespace _3DPrintsAPP.Controllers
             this.printerService = printerService;
         }
 
+        private string GetUserId()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var printers = await printerService.GetAllPrintersAsync();
+            var printers = await printerService.GetAllPrintersAsync(GetUserId());
             return View(printers);
         }
 
@@ -37,7 +43,7 @@ namespace _3DPrintsAPP.Controllers
                 return View(model);
             }
 
-            await printerService.CreatePrinterAsync(model);
+            await printerService.CreatePrinterAsync(model, GetUserId());
 
             return RedirectToAction(nameof(Index));
         }
@@ -45,7 +51,7 @@ namespace _3DPrintsAPP.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var model = await printerService.GetPrinterForEditAsync(id);
+            var model = await printerService.GetPrinterForEditAsync(id, GetUserId());
 
             if (model == null)
             {
@@ -63,7 +69,7 @@ namespace _3DPrintsAPP.Controllers
                 return View(model);
             }
 
-            bool isUpdated = await printerService.UpdatePrinterAsync(id, model);
+            bool isUpdated = await printerService.UpdatePrinterAsync(id, model, GetUserId());
 
             if (!isUpdated)
             {
@@ -76,7 +82,7 @@ namespace _3DPrintsAPP.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            Printer? printer = await printerService.GetPrinterByIdAsync(id);
+            Printer? printer = await printerService.GetPrinterByIdAsync(id, GetUserId());
 
             if (printer == null)
             {
@@ -89,7 +95,7 @@ namespace _3DPrintsAPP.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            bool isDeleted = await printerService.DeletePrinterAsync(id);
+            bool isDeleted = await printerService.DeletePrinterAsync(id, GetUserId());
 
             if (!isDeleted)
             {
@@ -102,7 +108,7 @@ namespace _3DPrintsAPP.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var viewModel = await printerService.GetPrinterDetailsAsync(id);
+            var viewModel = await printerService.GetPrinterDetailsAsync(id, GetUserId());
 
             if (viewModel == null)
             {

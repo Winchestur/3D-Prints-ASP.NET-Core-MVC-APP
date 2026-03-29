@@ -9,14 +9,16 @@ namespace _3D_Prints_APP.Data.Repositories
     {
         private readonly ApplicationDbContext dbContext;
 
-        public PrinterRepository(ApplicationDbContext _dbContext)
+        public PrinterRepository(ApplicationDbContext dbContext)
         {
-            dbContext = _dbContext;
+            this.dbContext = dbContext;
         }
 
-        public async Task<List<Printer>> GetAllAsync()
+        public async Task<List<Printer>> GetAllAsync(string userId)
         {
-            return await dbContext.Printers.ToListAsync();
+            return await dbContext.Printers
+                .Where(p => p.UserId == userId)
+                .ToListAsync();
         }
 
         public async Task AddAsync(Printer printer)
@@ -25,22 +27,22 @@ namespace _3D_Prints_APP.Data.Repositories
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<Printer?> GetByIdAsync(int id)
+        public async Task<Printer?> GetByIdAsync(int id, string userId)
         {
-            return await dbContext.Printers.FindAsync(id);
+            return await dbContext.Printers
+                .FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
         }
 
-        // its used for Edit/Delete
         public async Task SaveChangesAsync()
         {
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task<Printer?> GetByIdWithFilamentsAsync(int id)
+        public async Task<Printer?> GetByIdWithFilamentsAsync(int id, string userId)
         {
             return await dbContext.Printers
                 .Include(p => p.Filaments)
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
         }
 
         public async Task DeleteAsync(Printer printer)
