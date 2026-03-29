@@ -1,7 +1,8 @@
-﻿using _3DPrintsAPP.Enums;
-using _3DPrintsAPP.Data.Models;
+﻿using _3DPrintsAPP.Data.Models;
+using _3DPrintsAPP.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 namespace _3DPrintsAPP.Data.Configurations
 {
@@ -9,6 +10,16 @@ namespace _3DPrintsAPP.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Filament> builder)
         {
+            builder
+                .Property(f => f.Diameter)
+                .HasPrecision(18, 2);
+
+            builder
+                .HasOne(f => f.Printer)
+                .WithMany(f => f.Filaments)
+                .HasForeignKey(f => f.PrinterId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasData(
                 new Filament
                 {

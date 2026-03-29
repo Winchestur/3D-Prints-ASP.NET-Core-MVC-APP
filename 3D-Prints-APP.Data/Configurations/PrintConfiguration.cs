@@ -1,7 +1,8 @@
-﻿using _3DPrintsAPP.Enums;
-using _3DPrintsAPP.Data.Models;
+﻿using _3DPrintsAPP.Data.Models;
+using _3DPrintsAPP.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 namespace _3DPrintsAPP.Data.Configurations
 {
@@ -10,6 +11,12 @@ namespace _3DPrintsAPP.Data.Configurations
         public void Configure(EntityTypeBuilder<Print> builder)
         {
             builder.Property(p => p.UploadPhoto).HasMaxLength(2048);
+
+            builder
+                .HasOne(p => p.Printer)
+                .WithMany(pr => pr.Prints)
+                .HasForeignKey(p => p.PrinterId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasData(
  

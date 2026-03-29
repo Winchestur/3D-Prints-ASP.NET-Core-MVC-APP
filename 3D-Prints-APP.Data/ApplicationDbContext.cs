@@ -2,6 +2,7 @@
 using _3DPrintsAPP.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace _3DPrintsAPP.Data
 {
@@ -21,46 +22,7 @@ namespace _3DPrintsAPP.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<PrintFilament>()
-                .HasKey(x => new { x.PrintId, x.FilamentId });
-
-            modelBuilder.Entity<PrintFilament>()
-                .HasOne(pf => pf.Print)
-                .WithMany(p => p.PrintFilaments)
-                .HasForeignKey(pf => pf.PrintId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<PrintFilament>()
-                .HasOne(pf => pf.Filament)
-                .WithMany(f => f.PrintFilaments)
-                .HasForeignKey(pf => pf.FilamentId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Filament>()
-                .Property(f => f.Diameter)
-                .HasPrecision(18, 2);
-
-            modelBuilder.Entity<Printer>()
-                .Property(p => p.NozzleDiameter)
-                .HasPrecision(18, 2);
-
-            modelBuilder.Entity<Filament>()
-                .HasOne(f => f.Printer)
-                .WithMany(f => f.Filaments)
-                .HasForeignKey(f => f.PrinterId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Print>()
-                .HasOne(p => p.Printer)
-                .WithMany(pr => pr.Prints)
-                .HasForeignKey(p => p.PrinterId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.ApplyConfiguration(new PrinterConfiguration());
-            modelBuilder.ApplyConfiguration(new FilamentConfiguration());
-            modelBuilder.ApplyConfiguration(new PrintConfiguration());
-            modelBuilder.ApplyConfiguration(new PrintFilamentConfiguration());
-
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }
