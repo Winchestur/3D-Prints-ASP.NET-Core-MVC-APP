@@ -1,9 +1,12 @@
 ﻿using _3D_Prints_APP_Services.Contracts;
 using _3DPrintsAPP.ViewModels.Filaments;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace _3DPrintsAPP.Controllers
 {
+    [Authorize]
     public class FilamentsController : Controller
     {
         private readonly IFilamentService filamentService;
@@ -13,15 +16,20 @@ namespace _3DPrintsAPP.Controllers
             this.filamentService = filamentService;
         }
 
+        private string GetUserId()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        }
+
         public async Task<IActionResult> Index()
         {
-            var filaments = await filamentService.GetAllFilamentsAsync();
+            var filaments = await filamentService.GetAllFilamentsAsync(GetUserId());
             return View(filaments);
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var filament = await filamentService.GetFilamentDetailsAsync(id);
+            var filament = await filamentService.GetFilamentDetailsAsync(id, GetUserId());
             if (filament == null) return NotFound();
             return View(filament);
         }
@@ -38,13 +46,13 @@ namespace _3DPrintsAPP.Controllers
             if (!ModelState.IsValid)
                 return View(await filamentService.GetCreateViewModelAsync());
 
-            await filamentService.CreateFilamentAsync(model);
+            await filamentService.CreateFilamentAsync(model, GetUserId());
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            var vm = await filamentService.GetEditViewModelAsync(id);
+            var vm = await filamentService.GetEditViewModelAsync(id, GetUserId());
             if (vm == null) return NotFound();
             return View(vm);
         }
@@ -53,15 +61,15 @@ namespace _3DPrintsAPP.Controllers
         public async Task<IActionResult> Edit(int id, FilamentCreateEditViewModel model)
         {
             if (!ModelState.IsValid)
-                return View(await filamentService.GetEditViewModelAsync(id));
+                return View(await filamentService.GetEditViewModelAsync(id, GetUserId()));
 
-            await filamentService.EditFilamentAsync(id, model);
+            await filamentService.EditFilamentAsync(id, model, GetUserId());
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var filament = await filamentService.GetFilamentDetailsAsync(id);
+            var filament = await filamentService.GetFilamentDetailsAsync(id, GetUserId());
             if (filament == null) return NotFound();
             return View(filament);
         }
@@ -71,7 +79,7 @@ namespace _3DPrintsAPP.Controllers
         {
             try
             {
-                await filamentService.DeleteFilamentAsync(id);
+                await filamentService.DeleteFilamentAsync(id, GetUserId());
             }
             catch (KeyNotFoundException)
             {

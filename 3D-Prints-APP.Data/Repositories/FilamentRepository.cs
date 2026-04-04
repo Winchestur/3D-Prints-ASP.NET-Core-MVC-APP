@@ -1,10 +1,11 @@
-﻿using _3DPrintsAPP.Data;
+﻿using _3D_Prints_APP_Services.Contracts;
+using _3DPrintsAPP.Data;
 using _3DPrintsAPP.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace _3D_Prints_APP_Services
 {
-    public class FilamentRepository
+    public class FilamentRepository : IFilamentRepository
     {
         private readonly ApplicationDbContext dbContext;
 
@@ -13,18 +14,17 @@ namespace _3D_Prints_APP_Services
             this.dbContext = dbContext;
         }
 
-        public async Task<ICollection<Filament>> GetAllWithPrinterAsync()
+        public async Task<ICollection<Filament>> GetAllAsync(string userId)
         {
             return await dbContext.Filaments
-                .Include(f => f.Printer)
+                .Where(f => f.UserId == userId)
                 .ToListAsync();
         }
 
-        public async Task<Filament?> GetByIdWithPrinterAsync(int id)
+        public async Task<Filament?> GetByIdAsync(int id, string userId)
         {
             return await dbContext.Filaments
-                .Include(f => f.Printer)
-                .FirstOrDefaultAsync(f => f.Id == id);
+                .FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId);
         }
 
         public async Task AddAsync(Filament filament)
@@ -43,11 +43,6 @@ namespace _3D_Prints_APP_Services
         {
             dbContext.Filaments.Remove(filament);
             await dbContext.SaveChangesAsync();
-        }
-
-        public async Task<ICollection<Printer>> GetAllPrintersAsync()
-        {
-            return await dbContext.Printers.ToListAsync();
         }
     }
 }

@@ -9,11 +9,10 @@ namespace _3D_Prints_APP_Services.Contracts
 {
     public interface IFilamentRepository
     {
-        Task<ICollection<Filament>> GetAllWithPrinterAsync();
-        Task<Filament?> GetByIdWithPrinterAsync(int id);
+        Task<ICollection<Filament>> GetAllAsync(string userId);
+        Task<Filament?> GetByIdAsync(int id, string userId);
         Task AddAsync(Filament filament);
         Task UpdateAsync(Filament filament);
         Task DeleteAsync(Filament filament);
-        Task<ICollection<Printer>> GetAllPrintersAsync();
     }
 }

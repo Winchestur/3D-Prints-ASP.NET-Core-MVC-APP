@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _3DPrintsAPP.Data;
 
@@ -11,9 +12,11 @@ using _3DPrintsAPP.Data;
 namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260330001027_AddPrinterOptions")]
+    partial class AddPrinterOptions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,6 +162,58 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PrintFilament", b =>
+                {
+                    b.Property<int>("PrintId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FilamentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PrintId", "FilamentId");
+
+                    b.HasIndex("FilamentId");
+
+                    b.ToTable("PrintFilaments");
+
+                    b.HasData(
+                        new
+                        {
+                            PrintId = 1,
+                            FilamentId = 1
+                        },
+                        new
+                        {
+                            PrintId = 1,
+                            FilamentId = 3
+                        },
+                        new
+                        {
+                            PrintId = 2,
+                            FilamentId = 2
+                        },
+                        new
+                        {
+                            PrintId = 3,
+                            FilamentId = 3
+                        },
+                        new
+                        {
+                            PrintId = 4,
+                            FilamentId = 2
+                        },
+                        new
+                        {
+                            PrintId = 4,
+                            FilamentId = 5
+                        },
+                        new
+                        {
+                            PrintId = 5,
+                            FilamentId = 1
+                        });
+                });
+
             modelBuilder.Entity("_3DPrintsAPP.Data.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -260,13 +315,10 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                     b.Property<int>("FilamentColor")
                         .HasColumnType("int");
 
-                    b.Property<int>("FilamentOptionId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Material")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PrinterId")
+                    b.Property<int>("PrinterId")
                         .HasColumnType("int");
 
                     b.Property<string>("UploadPhoto")
@@ -274,118 +326,14 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<double>("WeightKG")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FilamentOptionId");
 
                     b.HasIndex("PrinterId");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Filaments");
-                });
-
-            modelBuilder.Entity("_3DPrintsAPP.Data.Models.FilamentOption", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Brand")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Diameter")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("FilamentColor")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Material")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UploadPhoto")
-                        .IsRequired()
-                        .HasMaxLength(2048)
-                        .HasColumnType("nvarchar(2048)");
-
-                    b.Property<double>("WeightKG")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FilamentOptions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Brand = 11,
-                            Diameter = 1.75m,
-                            FilamentColor = 7,
-                            Material = 1,
-                            UploadPhoto = "https://cdn2.botland.com.pl/127588-large_default/filament-bambu-lab-pc-175mm-1kg-w-zestawie-z-wielorazowa-szpula-black.jpg",
-                            WeightKG = 1.0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Brand = 2,
-                            Diameter = 1.75m,
-                            FilamentColor = 8,
-                            Material = 3,
-                            UploadPhoto = "https://m.media-amazon.com/images/I/71eFciMUSaL._AC_UF1000,1000_QL80_.jpg",
-                            WeightKG = 1.0
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Brand = 11,
-                            Diameter = 1.75m,
-                            FilamentColor = 3,
-                            Material = 1,
-                            UploadPhoto = "https://cdncloudcart.com/20502/products/images/467/bambu-lab-pla-cf-filament-s-karbonovi-vlakna-1-75mm-1kg-za-3d-printeri-65708d0c52b7f_150x150.jpeg?1744983052",
-                            WeightKG = 1.0
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Brand = 3,
-                            Diameter = 1.75m,
-                            FilamentColor = 9,
-                            Material = 1,
-                            UploadPhoto = "https://www.prusa3d.com/content/images/product/3146.jpg",
-                            WeightKG = 0.75
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Brand = 2,
-                            Diameter = 1.75m,
-                            FilamentColor = 3,
-                            Material = 5,
-                            UploadPhoto = "https://ruumik.ee/wp-content/uploads/2021/01/tpu_Translucent-Blue-3.jpg",
-                            WeightKG = 0.5
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Brand = 11,
-                            Diameter = 1.75m,
-                            FilamentColor = 1,
-                            Material = 2,
-                            UploadPhoto = "https://botland.com.pl/img/art/inne/24646_2.jpg",
-                            WeightKG = 1.0
-                        });
                 });
 
             modelBuilder.Entity("_3DPrintsAPP.Data.Models.Print", b =>
@@ -401,15 +349,10 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<bool>("IsPublic")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
                     b.Property<TimeOnly>("PrintTime")
                         .HasColumnType("time");
 
-                    b.Property<int?>("PrinterId")
+                    b.Property<int>("PrinterId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -425,15 +368,9 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                     b.Property<DateTime>("UploadedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PrinterId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Prints");
                 });
@@ -547,21 +484,6 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                         });
                 });
 
-            modelBuilder.Entity("_3DPrintsAPP.Data.Models.UserCollectionPrint", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("PrintId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "PrintId");
-
-                    b.HasIndex("PrintId");
-
-                    b.ToTable("UserCollectionPrints");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -613,42 +535,45 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PrintFilament", b =>
+                {
+                    b.HasOne("_3DPrintsAPP.Data.Models.Filament", "Filament")
+                        .WithMany("PrintFilaments")
+                        .HasForeignKey("FilamentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("_3DPrintsAPP.Data.Models.Print", "Print")
+                        .WithMany("PrintFilaments")
+                        .HasForeignKey("PrintId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Filament");
+
+                    b.Navigation("Print");
+                });
+
             modelBuilder.Entity("_3DPrintsAPP.Data.Models.Filament", b =>
                 {
-                    b.HasOne("_3DPrintsAPP.Data.Models.FilamentOption", "FilamentOption")
+                    b.HasOne("_3DPrintsAPP.Data.Models.Printer", "Printer")
                         .WithMany("Filaments")
-                        .HasForeignKey("FilamentOptionId")
+                        .HasForeignKey("PrinterId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("_3DPrintsAPP.Data.Models.Printer", null)
-                        .WithMany("Filaments")
-                        .HasForeignKey("PrinterId");
-
-                    b.HasOne("_3DPrintsAPP.Data.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("FilamentOption");
-
-                    b.Navigation("User");
+                    b.Navigation("Printer");
                 });
 
             modelBuilder.Entity("_3DPrintsAPP.Data.Models.Print", b =>
                 {
-                    b.HasOne("_3DPrintsAPP.Data.Models.Printer", null)
+                    b.HasOne("_3DPrintsAPP.Data.Models.Printer", "Printer")
                         .WithMany("Prints")
-                        .HasForeignKey("PrinterId");
-
-                    b.HasOne("_3DPrintsAPP.Data.Models.ApplicationUser", "User")
-                        .WithMany("Prints")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("PrinterId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Printer");
                 });
 
             modelBuilder.Entity("_3DPrintsAPP.Data.Models.Printer", b =>
@@ -670,40 +595,14 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("_3DPrintsAPP.Data.Models.UserCollectionPrint", b =>
+            modelBuilder.Entity("_3DPrintsAPP.Data.Models.Filament", b =>
                 {
-                    b.HasOne("_3DPrintsAPP.Data.Models.Print", "Print")
-                        .WithMany("UserCollectionPrints")
-                        .HasForeignKey("PrintId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("_3DPrintsAPP.Data.Models.ApplicationUser", "User")
-                        .WithMany("UserCollectionPrints")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Print");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("_3DPrintsAPP.Data.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("Prints");
-
-                    b.Navigation("UserCollectionPrints");
-                });
-
-            modelBuilder.Entity("_3DPrintsAPP.Data.Models.FilamentOption", b =>
-                {
-                    b.Navigation("Filaments");
+                    b.Navigation("PrintFilaments");
                 });
 
             modelBuilder.Entity("_3DPrintsAPP.Data.Models.Print", b =>
                 {
-                    b.Navigation("UserCollectionPrints");
+                    b.Navigation("PrintFilaments");
                 });
 
             modelBuilder.Entity("_3DPrintsAPP.Data.Models.Printer", b =>

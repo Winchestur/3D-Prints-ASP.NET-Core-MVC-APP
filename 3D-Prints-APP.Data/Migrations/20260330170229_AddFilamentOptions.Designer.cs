@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _3DPrintsAPP.Data;
 
@@ -11,9 +12,11 @@ using _3DPrintsAPP.Data;
 namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260330170229_AddFilamentOptions")]
+    partial class AddFilamentOptions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,6 +162,58 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PrintFilament", b =>
+                {
+                    b.Property<int>("PrintId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FilamentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PrintId", "FilamentId");
+
+                    b.HasIndex("FilamentId");
+
+                    b.ToTable("PrintFilaments");
+
+                    b.HasData(
+                        new
+                        {
+                            PrintId = 1,
+                            FilamentId = 1
+                        },
+                        new
+                        {
+                            PrintId = 1,
+                            FilamentId = 3
+                        },
+                        new
+                        {
+                            PrintId = 2,
+                            FilamentId = 2
+                        },
+                        new
+                        {
+                            PrintId = 3,
+                            FilamentId = 3
+                        },
+                        new
+                        {
+                            PrintId = 4,
+                            FilamentId = 2
+                        },
+                        new
+                        {
+                            PrintId = 4,
+                            FilamentId = 5
+                        },
+                        new
+                        {
+                            PrintId = 5,
+                            FilamentId = 1
+                        });
+                });
+
             modelBuilder.Entity("_3DPrintsAPP.Data.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -266,17 +321,13 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                     b.Property<int>("Material")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PrinterId")
+                    b.Property<int>("PrinterId")
                         .HasColumnType("int");
 
                     b.Property<string>("UploadPhoto")
                         .IsRequired()
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("WeightKG")
                         .HasColumnType("float");
@@ -286,8 +337,6 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                     b.HasIndex("FilamentOptionId");
 
                     b.HasIndex("PrinterId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Filaments");
                 });
@@ -401,15 +450,10 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<bool>("IsPublic")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
                     b.Property<TimeOnly>("PrintTime")
                         .HasColumnType("time");
 
-                    b.Property<int?>("PrinterId")
+                    b.Property<int>("PrinterId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -425,15 +469,9 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                     b.Property<DateTime>("UploadedTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PrinterId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Prints");
                 });
@@ -547,21 +585,6 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                         });
                 });
 
-            modelBuilder.Entity("_3DPrintsAPP.Data.Models.UserCollectionPrint", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("PrintId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "PrintId");
-
-                    b.HasIndex("PrintId");
-
-                    b.ToTable("UserCollectionPrints");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -613,42 +636,53 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PrintFilament", b =>
+                {
+                    b.HasOne("_3DPrintsAPP.Data.Models.Filament", "Filament")
+                        .WithMany("PrintFilaments")
+                        .HasForeignKey("FilamentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("_3DPrintsAPP.Data.Models.Print", "Print")
+                        .WithMany("PrintFilaments")
+                        .HasForeignKey("PrintId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Filament");
+
+                    b.Navigation("Print");
+                });
+
             modelBuilder.Entity("_3DPrintsAPP.Data.Models.Filament", b =>
                 {
                     b.HasOne("_3DPrintsAPP.Data.Models.FilamentOption", "FilamentOption")
                         .WithMany("Filaments")
                         .HasForeignKey("FilamentOptionId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("_3DPrintsAPP.Data.Models.Printer", null)
+                    b.HasOne("_3DPrintsAPP.Data.Models.Printer", "Printer")
                         .WithMany("Filaments")
-                        .HasForeignKey("PrinterId");
-
-                    b.HasOne("_3DPrintsAPP.Data.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("PrinterId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("FilamentOption");
 
-                    b.Navigation("User");
+                    b.Navigation("Printer");
                 });
 
             modelBuilder.Entity("_3DPrintsAPP.Data.Models.Print", b =>
                 {
-                    b.HasOne("_3DPrintsAPP.Data.Models.Printer", null)
+                    b.HasOne("_3DPrintsAPP.Data.Models.Printer", "Printer")
                         .WithMany("Prints")
-                        .HasForeignKey("PrinterId");
-
-                    b.HasOne("_3DPrintsAPP.Data.Models.ApplicationUser", "User")
-                        .WithMany("Prints")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("PrinterId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Printer");
                 });
 
             modelBuilder.Entity("_3DPrintsAPP.Data.Models.Printer", b =>
@@ -670,30 +704,9 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("_3DPrintsAPP.Data.Models.UserCollectionPrint", b =>
+            modelBuilder.Entity("_3DPrintsAPP.Data.Models.Filament", b =>
                 {
-                    b.HasOne("_3DPrintsAPP.Data.Models.Print", "Print")
-                        .WithMany("UserCollectionPrints")
-                        .HasForeignKey("PrintId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("_3DPrintsAPP.Data.Models.ApplicationUser", "User")
-                        .WithMany("UserCollectionPrints")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Print");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("_3DPrintsAPP.Data.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("Prints");
-
-                    b.Navigation("UserCollectionPrints");
+                    b.Navigation("PrintFilaments");
                 });
 
             modelBuilder.Entity("_3DPrintsAPP.Data.Models.FilamentOption", b =>
@@ -703,7 +716,7 @@ namespace _3DPrintsASP.NETCoreMVCAPP.Migrations
 
             modelBuilder.Entity("_3DPrintsAPP.Data.Models.Print", b =>
                 {
-                    b.Navigation("UserCollectionPrints");
+                    b.Navigation("PrintFilaments");
                 });
 
             modelBuilder.Entity("_3DPrintsAPP.Data.Models.Printer", b =>

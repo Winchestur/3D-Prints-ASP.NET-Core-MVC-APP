@@ -1,28 +1,27 @@
 ﻿using _3D_Prints_APP_Services.Contracts;
 using _3DPrintsAPP.Data.Models;
-using _3DPrintsAPP.Enums;
 using _3DPrintsAPP.ViewModels.Filaments;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace _3D_Prints_APP_Services
 {
-    public class FilamentService
+    public class FilamentService : IFilamentService
     {
         private readonly IFilamentRepository filamentRepository;
+        private readonly IFilamentOptionService filamentOptionService;
 
-        public FilamentService(IFilamentRepository filamentRepository)
+        public FilamentService(
+            IFilamentRepository filamentRepository,
+            IFilamentOptionService filamentOptionService)
         {
             this.filamentRepository = filamentRepository;
+            this.filamentOptionService = filamentOptionService;
         }
 
-        public async Task<ICollection<FilamentViewModel>> GetAllFilamentsAsync()
+        public async Task<ICollection<FilamentViewModel>> GetAllFilamentsAsync(string userId)
         {
-            var filaments = await filamentRepository.GetAllWithPrinterAsync();
+            var filaments = await filamentRepository.GetAllAsync(userId);
+
             return filaments.Select(f => new FilamentViewModel
             {
                 Id = f.Id,
@@ -31,15 +30,13 @@ namespace _3D_Prints_APP_Services
                 FilamentColor = f.FilamentColor,
                 UploadPhoto = f.UploadPhoto,
                 WeightKg = f.WeightKG,
-                Diameter = f.Diameter,
-                PrinterId = f.PrinterId,
-                PrinterModelName = f.Printer!.ModelName!
+                Diameter = f.Diameter
             }).ToList();
         }
 
-        public async Task<FilamentViewModel?> GetFilamentDetailsAsync(int id)
+        public async Task<FilamentViewModel?> GetFilamentDetailsAsync(int id, string userId)
         {
-            var f = await filamentRepository.GetByIdWithPrinterAsync(id);
+            var f = await filamentRepository.GetByIdAsync(id, userId);
             if (f == null) return null;
 
             return new FilamentViewModel
@@ -50,91 +47,86 @@ namespace _3D_Prints_APP_Services
                 FilamentColor = f.FilamentColor,
                 UploadPhoto = f.UploadPhoto,
                 WeightKg = f.WeightKG,
-                Diameter = f.Diameter,
-                PrinterId = f.PrinterId,
-                PrinterModelName = f.Printer!.ModelName!
+                Diameter = f.Diameter
             };
         }
 
         public async Task<FilamentCreateEditViewModel> GetCreateViewModelAsync()
         {
-            var printers = await filamentRepository.GetAllPrintersAsync();
+            var filamentOptions = await filamentOptionService.GetAllAsync();
+
             return new FilamentCreateEditViewModel
             {
-                BrandOptions = Enum.GetValues(typeof(Brand)).Cast<Brand>()
-                    .Select(v => new SelectListItem(v.ToString(), v.ToString()))
-                    .ToList(),
-                MaterialOptions = Enum.GetValues(typeof(Materials)).Cast<Materials>()
-                    .Select(v => new SelectListItem(v.ToString(), v.ToString()))
-                    .ToList(),
-                ColorOptions = Enum.GetValues(typeof(Colors)).Cast<Colors>()
-                    .Select(v => new SelectListItem(v.ToString(), v.ToString()))
-                    .ToList(),
-                PrinterOptions = printers.Select(p => new SelectListItem(p.ModelName!, p.Id.ToString()))
+                FilamentOptions = filamentOptions.Select(f => new SelectListItem(
+                    $"{f.Brand} - {f.Material} - {f.FilamentColor}",
+                    f.Id.ToString()))
                     .ToList()
             };
         }
 
-        public async Task CreateFilamentAsync(FilamentCreateEditViewModel model)
+        public async Task CreateFilamentAsync(FilamentCreateEditViewModel model, string userId)
         {
+            var option = await filamentOptionService.GetByIdAsync(model.FilamentOptionId);
+
+            if (option == null)
+            {
+                throw new KeyNotFoundException("Filament option not found.");
+            }
+
             var f = new Filament
             {
-                Brand = model.Brand,
-                Material = model.Material,
-                FilamentColor = model.FilamentColor,
-                UploadPhoto = model.UploadPhoto,
-                WeightKG = model.WeightKg,
-                Diameter = model.Diameter,
-                PrinterId = model.PrinterId
+                Brand = option.Brand,
+                Material = option.Material,
+                FilamentColor = option.FilamentColor,
+                UploadPhoto = option.UploadPhoto,
+                WeightKG = option.WeightKG,
+                Diameter = option.Diameter,
+                UserId = userId,
+                FilamentOptionId = option.Id
             };
+
             await filamentRepository.AddAsync(f);
         }
 
-        public async Task<FilamentCreateEditViewModel?> GetEditViewModelAsync(int id)
+        public async Task<FilamentCreateEditViewModel?> GetEditViewModelAsync(int id, string userId)
         {
-            var f = await filamentRepository.GetByIdWithPrinterAsync(id);
+            var f = await filamentRepository.GetByIdAsync(id, userId);
             if (f == null) return null;
 
-            var printers = await filamentRepository.GetAllPrintersAsync();
+            var filamentOptions = await filamentOptionService.GetAllAsync();
 
             return new FilamentCreateEditViewModel
             {
-                Brand = f.Brand,
-                Material = f.Material,
-                FilamentColor = f.FilamentColor,
-                UploadPhoto = f.UploadPhoto,
-                WeightKg = f.WeightKG,
-                Diameter = f.Diameter,
-                PrinterId = f.PrinterId,
-                BrandOptions = Enum.GetValues(typeof(Brand)).Cast<Brand>()
-                    .Select(v => new SelectListItem(v.ToString(), v.ToString())).ToList(),
-                MaterialOptions = Enum.GetValues(typeof(Materials)).Cast<Materials>()
-                    .Select(v => new SelectListItem(v.ToString(), v.ToString())).ToList(),
-                ColorOptions = Enum.GetValues(typeof(Colors)).Cast<Colors>()
-                    .Select(v => new SelectListItem(v.ToString(), v.ToString())).ToList(),
-                PrinterOptions = printers.Select(p => new SelectListItem(p.ModelName!, p.Id.ToString())).ToList()
+                FilamentOptionId = f.FilamentOptionId,
+                FilamentOptions = filamentOptions.Select(opt => new SelectListItem(
+                    $"{opt.Brand} - {opt.Material} - {opt.FilamentColor}",
+                    opt.Id.ToString()))
+                    .ToList()
             };
         }
 
-        public async Task EditFilamentAsync(int id, FilamentCreateEditViewModel model)
+        public async Task EditFilamentAsync(int id, FilamentCreateEditViewModel model, string userId)
         {
-            var f = await filamentRepository.GetByIdWithPrinterAsync(id);
+            var f = await filamentRepository.GetByIdAsync(id, userId);
             if (f == null) throw new KeyNotFoundException("Filament not found.");
 
-            f.Brand = model.Brand;
-            f.Material = model.Material;
-            f.FilamentColor = model.FilamentColor;
-            f.UploadPhoto = model.UploadPhoto;
-            f.WeightKG = model.WeightKg;
-            f.Diameter = model.Diameter;
-            f.PrinterId = model.PrinterId;
+            var option = await filamentOptionService.GetByIdAsync(model.FilamentOptionId);
+            if (option == null) throw new KeyNotFoundException("Filament option not found.");
+
+            f.Brand = option.Brand;
+            f.Material = option.Material;
+            f.FilamentColor = option.FilamentColor;
+            f.UploadPhoto = option.UploadPhoto;
+            f.WeightKG = option.WeightKG;
+            f.Diameter = option.Diameter;
+            f.FilamentOptionId = option.Id;
 
             await filamentRepository.UpdateAsync(f);
         }
 
-        public async Task DeleteFilamentAsync(int id)
+        public async Task DeleteFilamentAsync(int id, string userId)
         {
-            var f = await filamentRepository.GetByIdWithPrinterAsync(id);
+            var f = await filamentRepository.GetByIdAsync(id, userId);
             if (f == null) throw new KeyNotFoundException("Filament not found.");
 
             await filamentRepository.DeleteAsync(f);

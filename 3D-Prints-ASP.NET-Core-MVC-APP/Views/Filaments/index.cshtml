@@ -36,13 +36,8 @@
                             <span class="pill">@f.WeightKg kg</span>
                         </div>
 
-                        <div class="filament-meta">
-                            <strong>Printer:</strong> @f.PrinterModelName
-                        </div>
-
                         <div class="printer-actions d-flex gap-2 mt-3"
                              onclick="event.stopPropagation();">
-                            <a asp-action="Edit" asp-route-id="@f.Id" class="btn btn-warning btn-sm">Edit</a>
                             <a asp-action="Delete" asp-route-id="@f.Id" class="btn btn-danger btn-sm">Delete</a>
                         </div>
 

@@ -1,0 +1,25 @@
+﻿@model _3DPrintsAPP.Data.Models.FilamentOption
+
+@{
+    ViewData["Title"] = "Delete Filament Option";
+}
+
+<div class="container">
+    <div class="glass-card">
+        <h2 class="mb-4 text-danger">Delete Filament Option</h2>
+
+        <div class="mb-3">
+            <p><strong>Brand:</strong> @Model.Brand</p>
+            <p><strong>Material:</strong> @Model.Material</p>
+            <p><strong>Color:</strong> @Model.FilamentColor</p>
+            <p><strong>Diameter:</strong> @Model.Diameter</p>
+            <p><strong>Weight:</strong> @Model.WeightKG</p>
+            <img src="@Model.UploadPhoto" alt="@Model.Brand" style="max-width:200px; height:auto;" />
+        </div>
+
+        <form asp-action="Delete" method="post">
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>

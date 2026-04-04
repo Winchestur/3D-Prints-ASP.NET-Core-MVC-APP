@@ -9,12 +9,12 @@ namespace _3D_Prints_APP_Services.Contracts
 {
     public interface IFilamentService
     {
-        Task<ICollection<FilamentViewModel>> GetAllFilamentsAsync();
-        Task<FilamentViewModel?> GetFilamentDetailsAsync(int id);
+        Task<ICollection<FilamentViewModel>> GetAllFilamentsAsync(string userId);
+        Task<FilamentViewModel?> GetFilamentDetailsAsync(int id, string userId);
         Task<FilamentCreateEditViewModel> GetCreateViewModelAsync();
-        Task CreateFilamentAsync(FilamentCreateEditViewModel model);
-        Task<FilamentCreateEditViewModel?> GetEditViewModelAsync(int id);
-        Task EditFilamentAsync(int id, FilamentCreateEditViewModel model);
-        Task DeleteFilamentAsync(int id);
+        Task CreateFilamentAsync(FilamentCreateEditViewModel model, string userId);
+        Task<FilamentCreateEditViewModel?> GetEditViewModelAsync(int id, string userId);
+        Task EditFilamentAsync(int id, FilamentCreateEditViewModel model, string userId);
+        Task DeleteFilamentAsync(int id, string userId);
     }
 }

@@ -1,39 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-using _3DPrintsAPP.Enums;
-using static _3DPrintsAPP.Data.Validations.Validations;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace _3DPrintsAPP.ViewModels.Filaments
 {
     public class FilamentCreateEditViewModel
     {
         [Required]
-        public Brand Brand { get; set; }
+        public int FilamentOptionId { get; set; }
 
-        [Required]
-        public Materials Material { get; set; }
-
-        [Required]
-        public Colors FilamentColor { get; set; }
-
-        [Required]
-        [StringLength(MaxImgUrl, MinimumLength = MinImgUrl)]
-        public string UploadPhoto { get; set; } = null!;
-
-        [Required]
-        [Range(MinWeight, MaxWeight)]
-        public double WeightKg { get; set; }
-
-        [Required]
-        public decimal Diameter { get; set; }
-
-        [Required]
-        public int PrinterId { get; set; }
-
-        // Dropdown lists
-        public IEnumerable<SelectListItem> BrandOptions { get; set; } = new List<SelectListItem>();
-        public IEnumerable<SelectListItem> MaterialOptions { get; set; } = new List<SelectListItem>();
-        public IEnumerable<SelectListItem> ColorOptions { get; set; } = new List<SelectListItem>();
-        public IEnumerable<SelectListItem> PrinterOptions { get; set; } = new List<SelectListItem>();
+        public IEnumerable<SelectListItem> FilamentOptions { get; set; }
+            = new List<SelectListItem>();
     }
 }

@@ -1,0 +1,60 @@
+﻿@model _3DPrintsAPP.Data.Models.FilamentOption
+@using _3DPrintsAPP.Enums
+
+@{
+    ViewData["Title"] = "Create Filament Option";
+}
+
+<div class="container">
+    <div class="glass-card">
+        <h2 class="mb-4">Create Filament Option</h2>
+
+        <form asp-action="Create" method="post">
+            <div class="mb-3">
+                <label asp-for="Brand" class="form-label"></label>
+                <select asp-for="Brand" class="form-select"
+                        asp-items="Html.GetEnumSelectList<Brand>()"></select>
+                <span asp-validation-for="Brand" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Material" class="form-label"></label>
+                <select asp-for="Material" class="form-select"
+                        asp-items="Html.GetEnumSelectList<Materials>()"></select>
+                <span asp-validation-for="Material" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="FilamentColor" class="form-label"></label>
+                <select asp-for="FilamentColor" class="form-select"
+                        asp-items="Html.GetEnumSelectList<Colors>()"></select>
+                <span asp-validation-for="FilamentColor" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Diameter" class="form-label"></label>
+                <input asp-for="Diameter" class="form-control" />
+                <span asp-validation-for="Diameter" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="WeightKG" class="form-label"></label>
+                <input asp-for="WeightKG" class="form-control" />
+                <span asp-validation-for="WeightKG" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="UploadPhoto" class="form-label"></label>
+                <input asp-for="UploadPhoto" class="form-control" />
+                <span asp-validation-for="UploadPhoto" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">Create</button>
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

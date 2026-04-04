@@ -31,10 +31,13 @@ namespace _3DPrintsAPP.Data.Models
         public decimal Diameter { get; set; }
 
         [Required]
-        [ForeignKey(nameof(Printer))]
-        public int PrinterId { get; set; }
-        public virtual Printer Printer { get; set; } = null!;
-        public virtual ICollection<PrintFilament> PrintFilaments { get; set; } 
-            = new HashSet<PrintFilament>();
+        [ForeignKey(nameof(User))]
+        public string UserId { get; set; } = null!;
+        public virtual ApplicationUser User { get; set; } = null!;
+
+        [Required]
+        public int FilamentOptionId { get; set; }
+        public virtual FilamentOption FilamentOption { get; set; } = null!;
+
     }
 }
