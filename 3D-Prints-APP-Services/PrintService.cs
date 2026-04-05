@@ -32,13 +32,18 @@ namespace _3D_Prints_APP_Services
             }).ToList();
         }
 
-        public async Task<PrintViewModel?> GetPrintDetailsAsync(int id)
+        public async Task<PrintViewModel?> GetPrintDetailsAsync(int id, string userId)
         {
             var print = await printRepository.GetByIdWithUserAsync(id);
 
             if (print == null)
             {
                 return null;
+            }
+
+            if (print.UserId != userId && !print.IsPublic)
+            {
+                throw new UnauthorizedAccessException();
             }
 
             return new PrintViewModel
@@ -78,14 +83,18 @@ namespace _3D_Prints_APP_Services
 
             await printRepository.AddAsync(print);
         }
-
-        public async Task<PrintCreateEditViewModel?> GetEditViewModelAsync(int id)
+        public async Task<PrintCreateEditViewModel?> GetEditViewModelAsync(int id, string userId)
         {
             var print = await printRepository.GetByIdAsync(id);
 
             if (print == null)
             {
                 return null;
+            }
+
+            if (print.UserId != userId)
+            {
+                throw new UnauthorizedAccessException();
             }
 
             return new PrintCreateEditViewModel
@@ -119,13 +128,18 @@ namespace _3D_Prints_APP_Services
             await printRepository.UpdateAsync(print);
         }
 
-        public async Task<PrintViewModel?> GetDeleteViewModelAsync(int id)
+        public async Task<PrintViewModel?> GetDeleteViewModelAsync(int id, string userId)
         {
             var print = await printRepository.GetByIdWithUserAsync(id);
 
             if (print == null)
             {
                 return null;
+            }
+
+            if (print.UserId != userId)
+            {
+                throw new UnauthorizedAccessException();
             }
 
             return new PrintViewModel

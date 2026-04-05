@@ -21,6 +21,7 @@ namespace _3DPrintsAPP.Data.Configurations
                 .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+
         }
     }
 }

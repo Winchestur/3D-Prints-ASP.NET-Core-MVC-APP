@@ -38,14 +38,28 @@ namespace _3DPrintsAPP.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            PrintViewModel? viewModel = await printService.GetPrintDetailsAsync(id);
+            string? userId = userManager.GetUserId(User);
 
-            if (viewModel == null)
+            if (string.IsNullOrWhiteSpace(userId))
             {
-                return NotFound();
+                return Unauthorized();
             }
 
-            return View(viewModel);
+            try
+            {
+                PrintViewModel? viewModel = await printService.GetPrintDetailsAsync(id, userId);
+
+                if (viewModel == null)
+                {
+                    return NotFound();
+                }
+
+                return View(viewModel);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
         }
 
         [HttpGet]
@@ -80,7 +94,14 @@ namespace _3DPrintsAPP.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            PrintCreateEditViewModel? viewModel = await printService.GetEditViewModelAsync(id);
+            string? userId = userManager.GetUserId(User);
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Unauthorized();
+            }
+
+            var viewModel = await printService.GetEditViewModelAsync(id, userId);
 
             if (viewModel == null)
             {
@@ -126,7 +147,14 @@ namespace _3DPrintsAPP.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            PrintViewModel? viewModel = await printService.GetDeleteViewModelAsync(id);
+            string? userId = userManager.GetUserId(User);
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Unauthorized();
+            }
+
+            var viewModel = await printService.GetDeleteViewModelAsync(id, userId);
 
             if (viewModel == null)
             {
