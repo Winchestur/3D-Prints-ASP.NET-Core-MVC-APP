@@ -34,6 +34,11 @@ namespace _3DPrintsAPP.Data.Models
         public string UserId { get; set; } = null!;
         public virtual ApplicationUser User { get; set; } = null!;
 
+        [Required]
+        [ForeignKey(nameof(PrinterOption))]
+        public int PrinterOptionId { get; set; }
+        public virtual PrinterOption PrinterOption { get; set; } = null!;
+
         public virtual ICollection<Print> Prints { get; set; } 
             = new HashSet<Print>();
         

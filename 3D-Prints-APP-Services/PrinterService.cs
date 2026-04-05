@@ -8,10 +8,12 @@ namespace _3D_Prints_APP_Services
     public class PrinterService : IPrinterService
     {
         private readonly IPrinterRepository printerRepository;
+        private readonly IPrinterOptionRepository printerOptionRepository;
 
-        public PrinterService(IPrinterRepository printerRepository)
+        public PrinterService(IPrinterRepository printerRepository, IPrinterOptionRepository printerOptionRepository)
         {
             this.printerRepository = printerRepository;
+            this.printerOptionRepository = printerOptionRepository;
         }
 
         public async Task<List<PrinterViewModel>> GetAllPrintersAsync(string userId)
@@ -32,17 +34,25 @@ namespace _3D_Prints_APP_Services
                 .ToList();
         }
 
-        public async Task CreatePrinterAsync(PrinterViewModel model, string userId)
+        public async Task CreatePrinterAsync(PrinterCreateFromOptionViewModel model, string userId)
         {
+            var option = await printerOptionRepository.GetByIdAsync(model.PrinterOptionId);
+
+            if (option == null)
+            {
+                return;
+            }
+
             Printer printer = new Printer
             {
-                ModelName = model.ModelName,
-                NozzleDiameter = model.NozzleDiameter,
-                Description = model.Description,
-                UploadPhoto = model.UploadPhoto,
-                AMS = model.AMS,
+                ModelName = option.ModelName,
+                NozzleDiameter = option.NozzleDiameter,
+                Description = option.Description,
+                UploadPhoto = option.UploadPhoto,
+                AMS = option.AMS,
                 UploadedTime = DateTime.Now,
-                UserId = userId
+                UserId = userId,
+                PrinterOptionId = option.Id
             };
 
             await printerRepository.AddAsync(printer);

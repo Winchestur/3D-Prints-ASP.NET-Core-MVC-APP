@@ -1,0 +1,21 @@
+﻿@model _3DPrintsAPP.Data.Models.PrinterOption
+
+@{
+    ViewData["Title"] = "Delete Printer Option";
+}
+
+<h2 class="mb-4 text-danger">Delete Printer Option</h2>
+
+<div class="card p-3">
+    <h4>@Model.ModelName</h4>
+    <p><strong>Nozzle Diameter:</strong> @Model.NozzleDiameter</p>
+    <p><strong>Description:</strong> @Model.Description</p>
+    <p><strong>AMS:</strong> @(Model.AMS ? "Yes" : "No")</p>
+
+    <img src="@Model.UploadPhoto" alt="@Model.ModelName" style="max-width:250px; height:auto;" class="mb-3" />
+
+    <form asp-action="Delete" method="post">
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

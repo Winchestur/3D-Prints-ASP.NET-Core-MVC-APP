@@ -4,6 +4,7 @@ using _3DPrintsAPP.ViewModels.Printers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace _3DPrintsAPP.Controllers
 {
@@ -11,10 +12,12 @@ namespace _3DPrintsAPP.Controllers
     public class PrintersController : Controller
     {
         private readonly IPrinterService printerService;
+        private readonly IPrinterOptionService printerOptionService;
 
-        public PrintersController(IPrinterService printerService)
+        public PrintersController(IPrinterService printerService, IPrinterOptionService printerOptionService)
         {
             this.printerService = printerService;
+            this.printerOptionService = printerOptionService;
         }
 
         private string GetUserId()
@@ -30,16 +33,34 @@ namespace _3DPrintsAPP.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var options = await printerOptionService.GetAllAsync();
+
+            var model = new PrinterCreateFromOptionViewModel
+            {
+                PrinterOptions = options.Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = x.ModelName
+                })
+            };
+
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(PrinterViewModel model)
+        public async Task<IActionResult> Create(PrinterCreateFromOptionViewModel model)
         {
             if (!ModelState.IsValid)
             {
+                var options = await printerOptionService.GetAllAsync();
+                model.PrinterOptions = options.Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = x.ModelName
+                });
+
                 return View(model);
             }
 

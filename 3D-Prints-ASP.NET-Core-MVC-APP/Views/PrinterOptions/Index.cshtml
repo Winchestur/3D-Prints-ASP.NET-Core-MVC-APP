@@ -1,0 +1,42 @@
+﻿@model IEnumerable<_3DPrintsAPP.Data.Models.PrinterOption>
+
+@{
+    ViewData["Title"] = "Printer Options";
+}
+
+<h2 class="mb-4">Printer Options</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add New Option</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Model Name</th>
+            <th>Nozzle Diameter</th>
+            <th>Description</th>
+            <th>Photo</th>
+            <th>AMS</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var option in Model)
+        {
+            <tr>
+                <td>@option.ModelName</td>
+                <td>@option.NozzleDiameter</td>
+                <td>@option.Description</td>
+                <td>
+                    <img src="@option.UploadPhoto" alt="@option.ModelName" style="width:120px; height:auto;" />
+                </td>
+                <td>@(option.AMS ? "Yes" : "No")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@option.Id" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@option.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,51 +1,23 @@
-﻿@using _3DPrintsAPP.ViewModels.Printers
-@model PrinterCreateEditViewModel
+﻿@model _3DPrintsAPP.ViewModels.Printers.PrinterCreateFromOptionViewModel
 
 @{
-    ViewData["Title"] = "Add Printer";
+    ViewData["Title"] = "Create Printer";
 }
 
-<div class="container">
-    <div class="glass-card">
+<h2 class="mb-4">Create Printer</h2>
 
-        <h2>Add New Printer</h2>
-
-        <form asp-action="Create" method="post">
-
-            <div class="mb-3">
-                <label class="form-label">Model Name</label>
-                <input asp-for="ModelName" class="form-control" />
-                <span asp-validation-for="ModelName" class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Nozzle Diameter</label>
-                <input asp-for="NozzleDiameter" class="form-control" />
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Description</label>
-                <textarea asp-for="Description" class="form-control"></textarea>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Photo URL</label>
-                <input asp-for="UploadPhoto" class="form-control" />
-            </div>
-
-            <div class="form-check mb-3">
-                <input asp-for="AMS" class="form-check-input" />
-                <label class="form-check-label">AMS Support</label>
-            </div>
-
-            <button type="submit" class="btn btn-success">Create</button>
-
-            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-
-        </form>
-
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="PrinterOptionId" class="form-label"></label>
+        <select asp-for="PrinterOptionId" asp-items="Model.PrinterOptions" class="form-select">
+            <option value="">Choose printer option</option>
+        </select>
+        <span asp-validation-for="PrinterOptionId" class="text-danger"></span>
     </div>
-</div>
+
+    <button type="submit" class="btn btn-success">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

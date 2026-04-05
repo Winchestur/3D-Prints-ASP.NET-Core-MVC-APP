@@ -1,42 +1,24 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using _3DPrintsAPP.Data;
+using _3D_Prints_APP_Services.Contracts;
 using _3DPrintsAPP.ViewModels;
 
 namespace _3DPrintsAPP.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationDbContext _logger;
+        private readonly IPrintService printService;
 
-        public HomeController(ApplicationDbContext logger)
+        public HomeController(IPrintService printService)
         {
-            _logger = logger;
+            this.printService = printService;
         }
 
         [Authorize]
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var prints = _logger.Prints
-                .Include(p => p.Printer)
-                .OrderByDescending(p => p.UploadedTime)
-                .Take(9)
-                .Select(p => new PrintViewModel
-                {
-                    Id = p.Id,
-                    Title = p.Title,
-                    Description = p.Description!,
-                    PrintTime = p.PrintTime,
-                    UploadPhoto = p.UploadPhoto!,
-                    UploadedTime = p.UploadedTime,
-                    PrinterId = p.PrinterId,
-                    PrinterModelName = p.Printer!.ModelName!,
-                    Filaments = new List<string>()
-                })
-                .ToList();
-
+            ICollection<PrintViewModel> prints = await printService.GetLatestPublicPrintsAsync(9);
             return View(prints);
         }
     }

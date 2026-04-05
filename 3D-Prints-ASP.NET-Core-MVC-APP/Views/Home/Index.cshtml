@@ -28,7 +28,7 @@
                     @if (User?.Identity?.IsAuthenticated == true)
                     {
                         <a class="btn btn-light px-4"
-                           asp-controller="Prints"
+                           asp-controller="WorldPrints"
                            asp-action="Index">Explore Prints</a>
 
                         <a class="btn btn-outline-light px-4"
@@ -38,16 +38,6 @@
                         <a class="btn btn-outline-light px-4"
                            asp-controller="Filaments"
                            asp-action="Index">Filaments</a>
-                    }
-                    else
-                    {
-                        <a class="btn btn-light px-4"
-                           asp-area="Identity"
-                           asp-page="/Account/Register">Get started</a>
-
-                        <a class="btn btn-outline-light px-4"
-                           asp-area="Identity"
-                           asp-page="/Account/Login">Sign in</a>
                     }
                 </div>
             </div>
@@ -109,7 +99,6 @@
 
                         <div class="bl-card__meta">
                             <span class="pill">Print</span>
-                            <span class="pill ghost">@p.PrinterModelName</span>
                         </div>
 
                         <div class="bl-card__title">@p.Title</div>

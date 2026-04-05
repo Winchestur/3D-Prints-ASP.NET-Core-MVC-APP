@@ -1,0 +1,46 @@
+﻿@model _3DPrintsAPP.Data.Models.PrinterOption
+
+@{
+    ViewData["Title"] = "Create Printer Option";
+}
+
+<h2 class="mb-4">Create Printer Option</h2>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="ModelName" class="form-label"></label>
+        <input asp-for="ModelName" class="form-control" />
+        <span asp-validation-for="ModelName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NozzleDiameter" class="form-label"></label>
+        <input asp-for="NozzleDiameter" class="form-control" />
+        <span asp-validation-for="NozzleDiameter" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="UploadPhoto" class="form-label"></label>
+        <input asp-for="UploadPhoto" class="form-control" />
+        <span asp-validation-for="UploadPhoto" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="AMS" class="form-check-input" />
+        <label asp-for="AMS" class="form-check-label"></label>
+        <span asp-validation-for="AMS" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
