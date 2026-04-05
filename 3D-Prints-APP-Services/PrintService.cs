@@ -1,16 +1,11 @@
 ﻿using _3D_Prints_APP.Data.Repositories.Contracts;
+using _3D_Prints_APP_Services.Contracts;
 using _3DPrintsAPP.Data.Models;
 using _3DPrintsAPP.ViewModels;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace _3D_Prints_APP_Services
 {
-    public class PrintService
+    public class PrintService : IPrintService
     {
         private readonly IPrintRepository printRepository;
 
@@ -19,9 +14,9 @@ namespace _3D_Prints_APP_Services
             this.printRepository = printRepository;
         }
 
-        public async Task<ICollection<PrintViewModel>> GetAllPrintsAsync()
+        public async Task<ICollection<PrintViewModel>> GetAllPrintsAsync(string userId)
         {
-            var prints = await printRepository.GetAllWithPrinterAndFilamentsAsync();
+            var prints = await printRepository.GetAllByUserIdAsync(userId);
 
             return prints.Select(p => new PrintViewModel
             {
@@ -31,20 +26,20 @@ namespace _3D_Prints_APP_Services
                 PrintTime = p.PrintTime,
                 UploadPhoto = p.UploadPhoto!,
                 UploadedTime = p.UploadedTime,
-                PrinterId = p.PrinterId,
-                PrinterModelName = p.Printer!.ModelName!,
-                Filaments = p.PrintFilaments
-                    .Select(f => f.Filament.Brand.ToString())
-                    .ToList()
+                IsPublic = p.IsPublic,
+                OwnerName = p.User?.UserName,
+                OwnerId = p.UserId
             }).ToList();
         }
 
         public async Task<PrintViewModel?> GetPrintDetailsAsync(int id)
         {
-            Print? print = await printRepository.GetByIdWithPrinterAndFilamentsAsync(id);
+            var print = await printRepository.GetByIdWithUserAsync(id);
 
             if (print == null)
+            {
                 return null;
+            }
 
             return new PrintViewModel
             {
@@ -54,38 +49,21 @@ namespace _3D_Prints_APP_Services
                 PrintTime = print.PrintTime,
                 UploadPhoto = print.UploadPhoto!,
                 UploadedTime = print.UploadedTime,
-                PrinterId = print.PrinterId,
-                PrinterModelName = print.Printer!.ModelName!,
-                Filaments = print.PrintFilaments
-                    .Select(pf => $"{pf.Filament.Brand} {pf.Filament.Material} {pf.Filament.FilamentColor}")
-                    .ToList()
+                IsPublic = print.IsPublic,
+                OwnerName = print.User?.UserName,
+                OwnerId = print.UserId
             };
         }
 
-        public async Task<PrintCreateEditViewModel> GetCreateViewModelAsync()
+        public Task<PrintCreateEditViewModel> GetCreateViewModelAsync()
         {
-            var printers = await printRepository.GetAllPrintersAsync();
-            var filaments = await printRepository.GetAllFilamentsAsync();
-
-            var viewModel = new PrintCreateEditViewModel
+            return Task.FromResult(new PrintCreateEditViewModel
             {
-                PrintTime = new TimeOnly(1, 0),
-                PrinterOptions = printers.Select(p => new SelectListItem
-                {
-                    Value = p.Id.ToString(),
-                    Text = p.ModelName!
-                }).ToList(),
-                FilamentOptions = filaments.Select(f => new SelectListItem
-                {
-                    Value = f.Id.ToString(),
-                    Text = $"{f.Brand} {f.Material} {f.FilamentColor}"
-                }).ToList()
-            };
-
-            return viewModel;
+                PrintTime = new TimeOnly(1, 0)
+            });
         }
 
-        public async Task CreatePrintAsync(PrintCreateEditViewModel model)
+        public async Task CreatePrintAsync(PrintCreateEditViewModel model, string userId)
         {
             var print = new Print
             {
@@ -93,86 +71,62 @@ namespace _3D_Prints_APP_Services
                 Description = model.Description,
                 PrintTime = model.PrintTime,
                 UploadPhoto = model.UploadPhoto,
-                UploadedTime = DateTime.Now,
-                PrinterId = model.PrinterId
+                UploadedTime = DateTime.UtcNow,
+                UserId = userId,
+                IsPublic = false
             };
 
-            await printRepository.AddPrintAsync(print);
-
-            var printFilaments = model.SelectedFilamentIds
-                .Distinct()
-                .Select(filamentId => new PrintFilament
-                {
-                    PrintId = print.Id,
-                    FilamentId = filamentId
-                });
-
-            await printRepository.AddPrintFilamentsAsync(printFilaments);
+            await printRepository.AddAsync(print);
         }
 
         public async Task<PrintCreateEditViewModel?> GetEditViewModelAsync(int id)
         {
-            var print = await printRepository.GetByIdWithFilamentsAsync(id);
+            var print = await printRepository.GetByIdAsync(id);
 
             if (print == null)
+            {
                 return null;
+            }
 
             return new PrintCreateEditViewModel
             {
                 Title = print.Title,
                 Description = print.Description!,
                 PrintTime = print.PrintTime,
-                UploadPhoto = print.UploadPhoto!,
-                PrinterId = print.PrinterId,
-                SelectedFilamentIds = print.PrintFilaments
-                    .Select(pf => pf.FilamentId)
-                    .ToList()
+                UploadPhoto = print.UploadPhoto!
             };
         }
 
-        public async Task EditPrintAsync(int id, PrintCreateEditViewModel model)
+        public async Task EditPrintAsync(int id, PrintCreateEditViewModel model, string userId)
         {
-            var print = await printRepository.GetByIdWithFilamentsAsync(id);
+            var print = await printRepository.GetByIdAsync(id);
 
             if (print == null)
+            {
                 throw new KeyNotFoundException("Print not found.");
+            }
 
-            // update main properties
+            if (print.UserId != userId)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
             print.Title = model.Title;
             print.Description = model.Description;
             print.PrintTime = model.PrintTime;
             print.UploadPhoto = model.UploadPhoto;
-            print.PrinterId = model.PrinterId;
 
-            await printRepository.UpdatePrintAsync(print);
-
-            // sync many-to-many Filaments
-            var existingIds = print.PrintFilaments.Select(pf => pf.FilamentId).ToHashSet();
-            var newIds = model.SelectedFilamentIds.Distinct().ToHashSet();
-
-            var toRemove = print.PrintFilaments
-                .Where(pf => !newIds.Contains(pf.FilamentId))
-                .ToList();
-            if (toRemove.Any())
-                await printRepository.RemovePrintFilamentsAsync(toRemove);
-
-            var toAdd = newIds.Where(fid => !existingIds.Contains(fid))
-                              .Select(fid => new PrintFilament
-                              {
-                                  PrintId = print.Id,
-                                  FilamentId = fid
-                              }).ToList();
-
-            if (toAdd.Any())
-                await printRepository.AddPrintFilamentsAsync(toAdd);
+            await printRepository.UpdateAsync(print);
         }
 
         public async Task<PrintViewModel?> GetDeleteViewModelAsync(int id)
         {
-            var print = await printRepository.GetByIdWithPrinterAndFilamentsAsync(id);
+            var print = await printRepository.GetByIdWithUserAsync(id);
 
             if (print == null)
+            {
                 return null;
+            }
 
             return new PrintViewModel
             {
@@ -182,20 +136,159 @@ namespace _3D_Prints_APP_Services
                 PrintTime = print.PrintTime,
                 UploadPhoto = print.UploadPhoto!,
                 UploadedTime = print.UploadedTime,
-                PrinterId = print.PrinterId,
-                PrinterModelName = print.Printer!.ModelName!,
-                Filaments = print.PrintFilaments
-                    .Select(pf => $"{pf.Filament.Brand} {pf.Filament.Material} {pf.Filament.FilamentColor}")
-                    .ToList()
+                IsPublic = print.IsPublic,
+                OwnerName = print.User?.UserName,
+                OwnerId = print.UserId
             };
         }
-        public async Task DeletePrintAsync(int id)
-        {
-            var print = await printRepository.GetByIdWithFilamentsAsync(id);
-            if (print == null)
-                throw new KeyNotFoundException("Print not found.");
 
-            await printRepository.DeletePrintAsync(print);
+        public async Task DeletePrintAsync(int id, string userId)
+        {
+            var print = await printRepository.GetByIdAsync(id);
+
+            if (print == null)
+            {
+                throw new KeyNotFoundException("Print not found.");
+            }
+
+            if (print.UserId != userId)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            await printRepository.DeleteAsync(print);
+        }
+
+        public async Task PublishToWorldAsync(int printId, string userId)
+        {
+            var print = await printRepository.GetByIdAsync(printId);
+
+            if (print == null)
+            {
+                throw new KeyNotFoundException("Print not found.");
+            }
+
+            if (print.UserId != userId)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            print.IsPublic = true;
+            await printRepository.UpdateAsync(print);
+        }
+
+        public async Task<ICollection<PrintViewModel>> GetWorldPrintsAsync(string userId)
+        {
+            var prints = await printRepository.GetAllPublicAsync();
+            var userCollectionIds = await printRepository.GetUserCollectionIdsAsync(userId);
+
+            return prints.Select(p => new PrintViewModel
+            {
+                Id = p.Id,
+                Title = p.Title,
+                Description = p.Description!,
+                PrintTime = p.PrintTime,
+                UploadPhoto = p.UploadPhoto!,
+                UploadedTime = p.UploadedTime,
+                IsPublic = p.IsPublic,
+                OwnerName = p.User?.UserName,
+                IsInCollection = userCollectionIds.Contains(p.Id),
+                OwnerId = p.UserId
+            }).ToList();
+        }
+
+        public async Task AddToCollectionAsync(int printId, string userId)
+        {
+            var print = await printRepository.GetPublicByIdAsync(printId);
+
+            if (print == null)
+            {
+                throw new KeyNotFoundException("Public print not found.");
+            }
+
+            var exists = await printRepository.ExistsInCollectionAsync(printId, userId);
+            if (exists)
+            {
+                return;
+            }
+
+            await printRepository.AddToCollectionAsync(new UserCollectionPrint
+            {
+                PrintId = printId,
+                UserId = userId
+            });
+        }
+
+        public async Task RemoveFromCollectionAsync(int printId, string userId)
+        {
+            var exists = await printRepository.ExistsInCollectionAsync(printId, userId);
+
+            if (!exists)
+            {
+                return;
+            }
+
+            await printRepository.RemoveFromCollectionAsync(printId, userId);
+        }
+
+        public async Task<ICollection<PrintViewModel>> GetMyCollectionAsync(string userId)
+        {
+            var prints = await printRepository.GetCollectionByUserIdAsync(userId);
+
+            return prints.Select(p => new PrintViewModel
+            {
+                Id = p.Id,
+                Title = p.Title,
+                Description = p.Description!,
+                PrintTime = p.PrintTime,
+                UploadPhoto = p.UploadPhoto!,
+                UploadedTime = p.UploadedTime,
+                IsPublic = p.IsPublic,
+                OwnerName = p.User?.UserName,
+                OwnerId = p.UserId
+            }).ToList();
+        }
+
+        public Task<PrintCreateEditViewModel> RebuildCreateEditViewModelAsync(PrintCreateEditViewModel model)
+        {
+            return Task.FromResult(model);
+        }
+
+        public async Task<ICollection<PrintViewModel>> GetLatestPublicPrintsAsync(int count)
+        {
+            var prints = await printRepository.GetLatestPublicPrintsAsync(count);
+
+            return prints.Select(p => new PrintViewModel
+            {
+                Id = p.Id,
+                Title = p.Title,
+                Description = p.Description!,
+                PrintTime = p.PrintTime,
+                UploadPhoto = p.UploadPhoto!,
+                UploadedTime = p.UploadedTime,
+                IsPublic = p.IsPublic,
+                OwnerName = p.User?.UserName,
+                OwnerId = p.UserId
+            }).ToList();
+        }
+
+        public async Task MakePrivateAsync(int printId, string userId)
+        {
+            var print = await printRepository.GetByIdAsync(printId);
+
+            if (print == null)
+            {
+                throw new KeyNotFoundException("Print not found.");
+            }
+
+            if (print.UserId != userId)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            print.IsPublic = false;
+
+            await printRepository.UpdateAsync(print);
         }
     }
 }

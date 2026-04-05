@@ -1,21 +1,37 @@
 ﻿using _3D_Prints_APP_Services.Contracts;
+using _3DPrintsAPP.Data.Models;
 using _3DPrintsAPP.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace _3DPrintsAPP.Controllers
 {
+    [Authorize]
     public class PrintsController : Controller
-{
+    {
         private readonly IPrintService printService;
-        public PrintsController(IPrintService printService)
+        private readonly UserManager<ApplicationUser> userManager;
+
+        public PrintsController(
+            IPrintService printService,
+            UserManager<ApplicationUser> userManager)
         {
             this.printService = printService;
+            this.userManager = userManager;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            ICollection<PrintViewModel> prints = await printService.GetAllPrintsAsync();
+            string? userId = userManager.GetUserId(User);
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Unauthorized();
+            }
+
+            ICollection<PrintViewModel> prints = await printService.GetAllPrintsAsync(userId);
             return View(prints);
         }
 
@@ -25,7 +41,9 @@ namespace _3DPrintsAPP.Controllers
             PrintViewModel? viewModel = await printService.GetPrintDetailsAsync(id);
 
             if (viewModel == null)
+            {
                 return NotFound();
+            }
 
             return View(viewModel);
         }
@@ -33,24 +51,28 @@ namespace _3DPrintsAPP.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var viewModel = await printService.GetCreateViewModelAsync();
+            PrintCreateEditViewModel viewModel = await printService.GetCreateViewModelAsync();
             return View(viewModel);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PrintCreateEditViewModel model)
         {
-            if (model.SelectedFilamentIds == null || model.SelectedFilamentIds.Count == 0)
+            string? userId = userManager.GetUserId(User);
+
+            if (string.IsNullOrWhiteSpace(userId))
             {
-                ModelState.AddModelError(nameof(model.SelectedFilamentIds), "Select at least one filament.");
+                return Unauthorized();
             }
 
             if (!ModelState.IsValid)
             {
+                model = await printService.RebuildCreateEditViewModelAsync(model);
                 return View(model);
             }
 
-            await printService.CreatePrintAsync(model);
+            await printService.CreatePrintAsync(model, userId);
 
             return RedirectToAction(nameof(Index));
         }
@@ -58,34 +80,44 @@ namespace _3DPrintsAPP.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var viewModel = await printService.GetEditViewModelAsync(id);
+            PrintCreateEditViewModel? viewModel = await printService.GetEditViewModelAsync(id);
 
             if (viewModel == null)
+            {
                 return NotFound();
+            }
 
             return View(viewModel);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, PrintCreateEditViewModel model)
         {
-            if (model.SelectedFilamentIds == null || model.SelectedFilamentIds.Count == 0)
+            string? userId = userManager.GetUserId(User);
+
+            if (string.IsNullOrWhiteSpace(userId))
             {
-                ModelState.AddModelError(nameof(model.SelectedFilamentIds), "Select at least one filament.");
+                return Unauthorized();
             }
 
             if (!ModelState.IsValid)
             {
+                model = await printService.RebuildCreateEditViewModelAsync(model);
                 return View(model);
             }
 
             try
             {
-                await printService.EditPrintAsync(id, model);
+                await printService.EditPrintAsync(id, model, userId);
             }
             catch (KeyNotFoundException)
             {
                 return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
             }
 
             return RedirectToAction(nameof(Index));
@@ -94,24 +126,93 @@ namespace _3DPrintsAPP.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var viewModel = await printService.GetDeleteViewModelAsync(id);
+            PrintViewModel? viewModel = await printService.GetDeleteViewModelAsync(id);
 
             if (viewModel == null)
+            {
                 return NotFound();
+            }
 
             return View(viewModel);
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            string? userId = userManager.GetUserId(User);
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Unauthorized();
+            }
+
             try
             {
-                await printService.DeletePrintAsync(id);
+                await printService.DeletePrintAsync(id, userId);
             }
             catch (KeyNotFoundException)
             {
                 return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PublishToWorld(int id)
+        {
+            string? userId = userManager.GetUserId(User);
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                await printService.PublishToWorldAsync(id, userId);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MakePrivate(int id)
+        {
+            string? userId = userManager.GetUserId(User);
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                await printService.MakePrivateAsync(id, userId);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
             }
 
             return RedirectToAction(nameof(Index));

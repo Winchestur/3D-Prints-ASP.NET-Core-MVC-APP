@@ -1,0 +1,79 @@
+﻿@model IEnumerable<_3DPrintsAPP.ViewModels.PrintViewModel>
+
+@{
+    ViewData["Title"] = "My Collection";
+}
+
+<div class="container">
+    <div class="glass-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>My Collection</h2>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5">
+                <h4>Your collection is empty</h4>
+                <p class="text-muted">Add prints from World Prints to see them here.</p>
+                <a asp-controller="WorldPrints" asp-action="Index" class="btn btn-success">
+                    Browse World Prints
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+                @foreach (var p in Model)
+                {
+                    <div class="col-md-4">
+                        <div class="printer-card printer-card-link"
+                             onclick="window.location='@Url.Action("Details", "Prints", new { id = p.Id })'">
+
+                            <img src="@p.UploadPhoto"
+                                 class="printer-img"
+                                 alt="@p.Title" />
+
+                            <div class="printer-title">@p.Title</div>
+
+                            <div class="d-flex justify-content-center gap-2 flex-wrap mb-2">
+                                <span class="pill ghost">@p.PrintTime</span>
+                                <span class="pill ghost">@p.UploadedTime.ToShortDateString()</span>
+                                <span class="pill">Saved</span>
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(p.OwnerName))
+                            {
+                                <div class="text-center mb-2">
+                                    <span class="pill ghost">By @p.OwnerName</span>
+                                </div>
+                            }
+
+                            <div class="printer-actions d-flex gap-2 mt-3 flex-wrap"
+                                 onclick="event.stopPropagation();">
+                                <a asp-controller="Prints"
+                                   asp-action="Details"
+                                   asp-route-id="@p.Id"
+                                   class="btn btn-warning btn-sm">
+                                    Details
+                                </a>
+
+                                <form asp-action="RemoveFromCollection"
+                                      asp-route-id="@p.Id"
+                                      method="post"
+                                      class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        Remove
+                                    </button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+    </div>
+</div>

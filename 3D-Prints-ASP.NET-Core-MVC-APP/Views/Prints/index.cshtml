@@ -29,22 +29,53 @@
                         <div class="printer-title">@p.Title</div>
 
                         <div class="d-flex justify-content-center gap-2 flex-wrap mb-2">
-                            <span class="pill ghost">Printer: @p.PrinterModelName</span>
+                            @if (!string.IsNullOrWhiteSpace(p.PrintOptionName))
+                            {
+                                <span class="pill ghost">@p.PrintOptionName</span>
+                            }
+
                             <span class="pill ghost">@p.PrintTime</span>
                             <span class="pill ghost">@p.UploadedTime.ToShortDateString()</span>
-                        </div>
 
-                        <div class="d-flex justify-content-center gap-2 flex-wrap mb-2">
-                            @foreach (var f in p.Filaments)
+                            @if (p.IsPublic)
                             {
-                                <span class="pill">@f</span>
+                                <span class="pill">Public</span>
+                            }
+                            else
+                            {
+                                <span class="pill ghost">Private</span>
                             }
                         </div>
 
-                        <div class="printer-actions d-flex gap-2 mt-3"
+                        <div class="printer-actions d-flex gap-2 mt-3 flex-wrap"
                              onclick="event.stopPropagation();">
                             <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-warning btn-sm">Edit</a>
                             <a asp-action="Delete" asp-route-id="@p.Id" class="btn btn-danger btn-sm">Delete</a>
+
+                            @if (!p.IsPublic)
+                            {
+                                <form asp-action="PublishToWorld"
+                                      asp-route-id="@p.Id"
+                                      method="post"
+                                      class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        Publish
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-action="MakePrivate"
+                                      asp-route-id="@p.Id"
+                                      method="post"
+                                      class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-secondary btn-sm">
+                                        Make Private
+                                    </button>
+                                </form>
+                            }
                         </div>
 
                     </div>

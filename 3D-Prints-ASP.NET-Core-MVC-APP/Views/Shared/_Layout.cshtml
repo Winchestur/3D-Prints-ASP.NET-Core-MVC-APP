@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -30,14 +31,65 @@
                     <ul class="navbar-nav flex-grow-1">
                         @if (User?.Identity?.IsAuthenticated == true)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Printers" asp-action="Index">Printers</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="printersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Printers
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="printersDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Printers" asp-action="Index">My Printers</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Printers" asp-action="Create">Create Printer</a>
+                                    </li>
+
+                                    @if (User.Identity?.IsAuthenticated == true &&
+                                                                    User.FindFirstValue(ClaimTypes.NameIdentifier) == "admin-user-id")
+                                    {
+                                        <li><hr class="dropdown-divider" /></li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="PrinterOptions" asp-action="Index">Printer Options</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="PrinterOptions" asp-action="Create">Add Printer Option</a>
+                                        </li>
+                                    }
+                                </ul>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Filaments" asp-action="Index">Filaments</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="printersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Filaments
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="filamentDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Filaments" asp-action="Index">My Filaments</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Filaments" asp-action="Create">Create Filament</a>
+                                    </li>
+
+                                    @if (User.Identity?.IsAuthenticated == true &&
+                                                                    User.FindFirstValue(ClaimTypes.NameIdentifier) == "admin-user-id")
+                                    {
+                                        <li><hr class="dropdown-divider" /></li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="FilamentOptions" asp-action="Index">Filaments Options</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="FilamentOptions" asp-action="Create">Add Filament Option</a>
+                                        </li>
+                                    }
+                                </ul>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Prints" asp-action="Index">Prints</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="WorldPrints" asp-action="Index">World Prints</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="MyCollection" asp-action="Index">My Collection</a>
                             </li>
                         }
                     </ul>

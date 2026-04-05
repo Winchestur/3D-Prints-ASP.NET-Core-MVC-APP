@@ -32,6 +32,12 @@ namespace _3DPrintsAPP
             builder.Services.AddScoped<IPrintRepository, PrintRepository>();
             builder.Services.AddScoped<IPrintService, PrintService>();
 
+            builder.Services.AddScoped<IPrinterOptionRepository, PrinterOptionRepository>();
+            builder.Services.AddScoped<IPrinterOptionService, PrinterOptionService>();
+
+            builder.Services.AddScoped<IFilamentOptionRepository, FilamentOptionRepository>();
+            builder.Services.AddScoped<IFilamentOptionService, FilamentOptionService>();
+
             builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 ConfigureIdentityOptions(builder.Configuration, options);

@@ -1,15 +1,11 @@
-﻿using _3DPrintsAPP.Data;
+﻿using _3D_Prints_APP.Data.Repositories.Contracts;
+using _3DPrintsAPP.Data;
 using _3DPrintsAPP.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace _3D_Prints_APP.Data.Repositories
 {
-    public class PrintRepository
+    public class PrintRepository : IPrintRepository
     {
         private readonly ApplicationDbContext dbContext;
 
@@ -18,70 +14,110 @@ namespace _3D_Prints_APP.Data.Repositories
             this.dbContext = dbContext;
         }
 
-        public async Task<ICollection<Print>> GetAllWithPrinterAndFilamentsAsync()
+        public async Task<ICollection<Print>> GetAllByUserIdAsync(string userId)
         {
             return await dbContext.Prints
-                .Include(p => p.Printer)
-                .Include(pf => pf.PrintFilaments)
-                    .ThenInclude(f => f.Filament)
+                .Include(p => p.User)
+                .Where(p => p.UserId == userId)
                 .ToListAsync();
         }
 
-        public async Task<Print?> GetByIdWithPrinterAndFilamentsAsync(int id)
+        public async Task<ICollection<Print>> GetAllPublicAsync()
         {
             return await dbContext.Prints
-                .Include(p => p.Printer)
-                .Include(p => p.PrintFilaments)
-                    .ThenInclude(pf => pf.Filament)
+                .Include(p => p.User)
+                .Where(p => p.IsPublic)
+                .ToListAsync();
+        }
+
+        public async Task<Print?> GetByIdAsync(int id)
+        {
+            return await dbContext.Prints
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<ICollection<Printer>> GetAllPrintersAsync()
-        {
-            return await dbContext.Printers.ToListAsync();
-        }
-
-        public async Task<ICollection<Filament>> GetAllFilamentsAsync()
-        {
-            return await dbContext.Filaments.ToListAsync();
-        }
-
-        public async Task AddPrintAsync(Print print)
-        {
-            dbContext.Prints.Add(print);
-            await dbContext.SaveChangesAsync();
-        }
-
-        public async Task AddPrintFilamentsAsync(IEnumerable<PrintFilament> printFilaments)
-        {
-            dbContext.PrintFilaments.AddRange(printFilaments);
-            await dbContext.SaveChangesAsync();
-        }
-
-        public async Task<Print?> GetByIdWithFilamentsAsync(int id)
+        public async Task<Print?> GetPublicByIdAsync(int id)
         {
             return await dbContext.Prints
-                .Include(p => p.PrintFilaments)
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.Id == id && p.IsPublic);
         }
 
-        public async Task UpdatePrintAsync(Print print)
+        public async Task AddAsync(Print print)
+        {
+            await dbContext.Prints.AddAsync(print);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Print print)
         {
             dbContext.Prints.Update(print);
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task RemovePrintFilamentsAsync(IEnumerable<PrintFilament> printFilaments)
+        public async Task DeleteAsync(Print print)
         {
-            dbContext.PrintFilaments.RemoveRange(printFilaments);
+            dbContext.Prints.Remove(print);
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task DeletePrintAsync(Print print)
+        public async Task<bool> ExistsInCollectionAsync(int printId, string userId)
         {
-            dbContext.PrintFilaments.RemoveRange(print.PrintFilaments);
-            dbContext.Prints.Remove(print);
+            return await dbContext.UserCollectionPrints
+                .AnyAsync(x => x.PrintId == printId && x.UserId == userId);
+        }
+
+        public async Task AddToCollectionAsync(UserCollectionPrint entity)
+        {
+            await dbContext.UserCollectionPrints.AddAsync(entity);
             await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<ICollection<Print>> GetCollectionByUserIdAsync(string userId)
+        {
+            return await dbContext.UserCollectionPrints
+                .Where(x => x.UserId == userId)
+                .Include(x => x.Print)
+                .ThenInclude(p => p.User)
+                .Select(x => x.Print)
+                .ToListAsync();
+        }
+
+        public async Task<ICollection<Print>> GetLatestPublicPrintsAsync(int count)
+        {
+            return await dbContext.Prints
+                .Include(p => p.User)
+                .Where(p => p.IsPublic)
+                .OrderByDescending(p => p.UploadedTime)
+                .Take(count)
+                .ToListAsync();
+        }
+
+        public async Task<Print?> GetByIdWithUserAsync(int id)
+        {
+            return await dbContext.Prints
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task RemoveFromCollectionAsync(int printId, string userId)
+        {
+            var entity = await dbContext.UserCollectionPrints
+                .FirstOrDefaultAsync(x => x.PrintId == printId && x.UserId == userId);
+
+            if (entity != null)
+            {
+                dbContext.UserCollectionPrints.Remove(entity);
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task<HashSet<int>> GetUserCollectionIdsAsync(string userId)
+        {
+            return await dbContext.UserCollectionPrints
+                .Where(x => x.UserId == userId)
+                .Select(x => x.PrintId)
+                .ToHashSetAsync();
         }
     }
 }
