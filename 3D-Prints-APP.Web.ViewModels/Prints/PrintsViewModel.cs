@@ -21,5 +21,6 @@
         public string? OwnerName { get; set; }
         public string? OwnerId { get; set; }
         public bool IsInCollection { get; set; }
+        public string? ReturnUrl { get; set; }
     }
 }

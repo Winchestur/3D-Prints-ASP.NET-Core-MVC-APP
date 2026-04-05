@@ -4,11 +4,24 @@
     ViewData["Title"] = "World Prints";
 }
 
+<link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+
 <div class="container">
     <div class="glass-card">
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h2>World Prints</h2>
+        </div>
+
+        <div class="bl-toolbar mb-4">
+            <div class="bl-tabs">
+                <button type="button" class="bl-tab active" data-filter="all">All</button>
+            </div>
+
+            <div class="bl-search">
+                <span class="bl-search__icon">⌕</span>
+                <input id="searchBox" class="form-control" placeholder="Search world prints..." />
+            </div>
         </div>
 
         @if (!Model.Any())
@@ -20,16 +33,19 @@
         }
         else
         {
-            <div class="row g-4">
+            <div id="worldPrintsGrid" class="row g-4">
                 @foreach (var p in Model)
                 {
-                    <div class="col-md-4">
-                        <div class="printer-card printer-card-link"
-                             onclick="window.location='@Url.Action("Details", "Prints", new { id = p.Id })'">
+                    <div class="col-md-4 world-print-card"
+                         data-tags="@($"{p.Title} {p.Description} {p.OwnerName}")">
 
-                            <img src="@p.UploadPhoto"
-                                 class="printer-img"
-                                 alt="@p.Title" />
+                        <div class="printer-card printer-card-link"
+                             onclick="window.location='@Url.Action("Details", "Prints",
+                                                          new { id = p.Id, returnUrl = Context.Request.Path + Context.Request.QueryString })'">
+
+                    <img src="@p.UploadPhoto"
+                         class="printer-img"
+                         alt="@p.Title" />
 
                             <div class="printer-title">@p.Title</div>
 
@@ -39,7 +55,7 @@
                                 <span class="pill">Public</span>
                             </div>
 
-                            @if (!string.IsNullOrWhiteSpace(p.OwnerName))
+                    @if (!string.IsNullOrWhiteSpace(p.OwnerName))
                             {
                                 <div class="text-center mb-2">
                                     <span class="pill ghost">By @p.OwnerName</span>
@@ -51,6 +67,7 @@
                                 <a asp-controller="Prints"
                                    asp-action="Details"
                                    asp-route-id="@p.Id"
+                                   asp-route-returnUrl="@(Context.Request.Path + Context.Request.QueryString)"
                                    class="btn btn-warning btn-sm">
                                     Details
                                 </a>
@@ -90,3 +107,30 @@
 
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const searchBox = document.getElementById('searchBox');
+            const cards = Array.from(document.querySelectorAll('.world-print-card'));
+
+            if (!searchBox || cards.length === 0) {
+                return;
+            }
+
+            function applySearch() {
+                const q = (searchBox.value || "").trim().toLowerCase();
+
+                cards.forEach(card => {
+                    const tags = (card.getAttribute('data-tags') || "").toLowerCase();
+                    const text = card.innerText.toLowerCase();
+                    const match = !q || tags.includes(q) || text.includes(q);
+
+                    card.style.display = match ? "" : "none";
+                });
+            }
+
+            searchBox.addEventListener('input', applySearch);
+        })();
+    </script>
+}
