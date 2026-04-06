@@ -69,8 +69,6 @@ To access most features:
 ~~~~
 * Introduction section
 * Navigation buttons
-* List of prints (after login)
-* Search functionality
 ~~~~
 If the user is not logged in, buttons for registration and login are shown.
 
@@ -148,19 +146,27 @@ https://localhost:xxxx/
 
 ![register](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/register.png)
 
-![HomePage1](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/HomePage1.png)
+![HomePage](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/HomePage.png)
 
-![HomePage2](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/HomePage2.png)
+![MyPrinters](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/MyPrinters.png)
 
-![PrinterIndex](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/PrinterIndex.png)
+![CreatePrinter](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/CreatePrinter.png)
 
-![AddNewPrinter](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/AddNewPrinter.png)
+![CreatePrinterOption](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/CreatePrinterOption.png)
 
-![FilamentDetails](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/FilamentDetails.png)
+![PrinterOption](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/PrinterOption.png)
 
-![FilamentDelete](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/FilamentDelete.png)
+![EditFilamentOption](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/EditFilamentOption.png)
 
-![DBContext](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/DBContext.png)
+![CreateFilamentOption](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/CreateFilamentOption.png)
+
+![MyPrints](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/MyPrints.png)
+
+![WorldPrints](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/WorldPrints.png)
+
+![MyCollection](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/MyCollection.png)
+
+![AdminPages](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/AdminPages.png)
 
 ---
 

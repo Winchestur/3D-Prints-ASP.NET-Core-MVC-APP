@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3D-Prints-APP.GCommon", "..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3D-Prints-APP.Web.ViewModels", "..\3D-Prints-APP.Web.ViewModels\3D-Prints-APP.Web.ViewModels.csproj", "{C6A1CFD2-B8B9-4AF6-BC79-7E96DD811ADF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3DPrintsAPP.Tests", "..\3DPrintsAPP.Tests\3DPrintsAPP.Tests.csproj", "{43BEB864-4657-435A-BCFD-97143E0FF414}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{C6A1CFD2-B8B9-4AF6-BC79-7E96DD811ADF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6A1CFD2-B8B9-4AF6-BC79-7E96DD811ADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6A1CFD2-B8B9-4AF6-BC79-7E96DD811ADF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43BEB864-4657-435A-BCFD-97143E0FF414}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43BEB864-4657-435A-BCFD-97143E0FF414}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43BEB864-4657-435A-BCFD-97143E0FF414}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43BEB864-4657-435A-BCFD-97143E0FF414}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
