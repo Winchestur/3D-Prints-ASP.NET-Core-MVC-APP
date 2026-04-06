@@ -21,7 +21,9 @@
     <ProjectReference Include="..\3D-Prints-APP-Services\3D-Prints-APP-Services.Core.csproj" />
     <ProjectReference Include="..\3D-Prints-APP.Data.Model\3D-Prints-APP.Data.Model.csproj" />
     <ProjectReference Include="..\3D-Prints-APP.Data\3D-Prints-APP.Data.csproj" />
+    <ProjectReference Include="..\3D-Prints-APP.GCommon\3D-Prints-APP.GCommon.csproj" />
     <ProjectReference Include="..\3D-Prints-APP.Web.ViewModels\3D-Prints-APP.Web.ViewModels.csproj" />
+    <ProjectReference Include="..\3D-Prints-ASP.NET-Core-MVC-APP\3D-Prints-APP.Web.csproj" />
   </ItemGroup>
 
 </Project>
