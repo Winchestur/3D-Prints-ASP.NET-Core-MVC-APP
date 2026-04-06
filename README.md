@@ -160,8 +160,6 @@ https://localhost:xxxx/
 
 ![FilamentDelete](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/FilamentDelete.png)
 
-![AddNewPrint](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/AddNewPrint.png)
-
 ![DBContext](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/DBContext.png)
 
 ---
