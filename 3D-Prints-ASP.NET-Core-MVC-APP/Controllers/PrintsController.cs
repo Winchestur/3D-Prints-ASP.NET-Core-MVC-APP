@@ -36,7 +36,7 @@ namespace _3DPrintsAPP.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, string? returnUrl)
         {
             string? userId = userManager.GetUserId(User);
 
@@ -53,6 +53,8 @@ namespace _3DPrintsAPP.Controllers
                 {
                     return NotFound();
                 }
+
+                viewModel.ReturnUrl = returnUrl;
 
                 return View(viewModel);
             }

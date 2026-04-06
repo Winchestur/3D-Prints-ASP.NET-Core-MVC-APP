@@ -4,35 +4,41 @@
     ViewData["Title"] = "Filament Options";
 }
 
-<div class="container">
-    <div class="glass-card">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2>Filament Options</h2>
+<h2 class="mb-4">Filament Options</h2>
 
-            <a asp-action="Create" class="btn btn-success">
-                Add New Filament Option
-            </a>
-        </div>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add New Option</a>
+</p>
 
-        <div class="row g-4">
-            @foreach (var f in Model)
-            {
-                <div class="col-md-4">
-                    <div class="filament-card">
-                        <img src="@f.UploadPhoto"
-                             class="printer-img"
-                             alt="@($"{f.Brand} {f.Material}")" />
-
-                        <div class="filament-title">@f.Brand - @f.Material</div>
-
-                        <div class="d-flex justify-content-center gap-2 flex-wrap mb-2">
-                            <span class="pill ghost">@f.FilamentColor</span>
-                            <span class="pill ghost">@f.Diameter mm</span>
-                            <span class="pill ghost">@f.WeightKG kg</span>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-</div>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Brand</th>
+            <th>Material</th>
+            <th>Color</th>
+            <th>Diameter</th>
+            <th>Weight</th>
+            <th>Photo</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var option in Model)
+        {
+            <tr>
+                <td>@option.Brand</td>
+                <td>@option.Material</td>
+                <td>@option.FilamentColor</td>
+                <td>@option.Diameter</td>
+                <td>@option.WeightKG</td>
+                <td>
+                    <img src="@option.UploadPhoto" alt="@option.Brand" style="width:120px; height:auto;" />
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@option.Id" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@option.Id" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

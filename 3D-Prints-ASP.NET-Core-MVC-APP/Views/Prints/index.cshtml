@@ -20,7 +20,8 @@
             {
                 <div class="col-md-4">
                     <div class="printer-card printer-card-link"
-                         onclick="window.location='@Url.Action("Details", "Prints", new { id = p.Id })'">
+                         onclick="window.location='@Url.Action("Details", "Prints",
+                         new { id = p.Id, returnUrl = Context.Request.Path + Context.Request.QueryString })'">
 
                         <img src="@p.UploadPhoto"
                              class="printer-img"

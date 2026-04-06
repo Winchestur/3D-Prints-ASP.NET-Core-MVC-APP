@@ -25,7 +25,14 @@
             }
 
             <div class="d-flex gap-2">
-                <a asp-action="Index" class="btn btn-secondary">Back</a>
+                @if (!string.IsNullOrWhiteSpace(Model.ReturnUrl))
+                {
+                    <a href="@Model.ReturnUrl" class="btn btn-secondary">Back</a>
+                }
+                else
+                {
+                    <a asp-action="Index" class="btn btn-secondary">Back</a>
+                }
 
                 @if (currentUserId == Model.OwnerId)
                 {
