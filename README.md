@@ -180,7 +180,7 @@ Update-Database
 
 ![CreatePrinterOption](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/CreatePrinterOption.png)
 
-![PrinterOption](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/PrinterOption.png)
+![PrinterOptions](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/PrinterOptions.png)
 
 ![EditFilamentOption](https://github.com/Winchestur/3D-Prints-ASP.NET-Core-MVC-APP/blob/main/3D-Prints-ASP.NET-Core-MVC-APP/wwwroot/images/EditFilamentOption.png)
 
