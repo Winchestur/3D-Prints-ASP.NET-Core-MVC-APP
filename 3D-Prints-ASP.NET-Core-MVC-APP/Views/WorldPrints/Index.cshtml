@@ -62,6 +62,48 @@
                                 </div>
                             }
 
+                            <div class="text-center mb-2">
+                                @{
+                                    var rounded = (int)Math.Round(p.AverageRating, MidpointRounding.AwayFromZero);
+                                }
+
+                                <div class="d-flex justify-content-center align-items-center gap-1 flex-wrap">
+                                    <span class="pill ghost">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= rounded)
+                                            {
+                                                @:★
+                                            }
+                                            else
+                                            {
+                                                @:☆
+                                            }
+                                        }
+                                    </span>
+
+                                    <span class="pill ghost">@p.AverageRating.ToString("0.0")</span>
+                                    <span class="pill ghost">(@p.RatingsCount)</span>
+                                </div>
+                            </div>
+
+                            <div class="text-center mb-2" onclick="event.stopPropagation();">
+                                <form asp-action="Rate" method="post" class="d-flex justify-content-center gap-1 flex-wrap">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="PrintId" value="@p.Id" />
+
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <button type="submit"
+                                                name="Value"
+                                                value="@i"
+                                                class="btn btn-sm @(p.UserRating == i ? "btn-warning" : "btn-outline-warning")">
+                                            ★ @i
+                                        </button>
+                                    }
+                                </form>
+                            </div>
+
                             <div class="printer-actions d-flex gap-2 mt-3 flex-wrap"
                                  onclick="event.stopPropagation();">
                                 <a asp-controller="Prints"

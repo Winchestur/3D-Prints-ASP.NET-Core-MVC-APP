@@ -22,5 +22,9 @@
         public string? OwnerId { get; set; }
         public bool IsInCollection { get; set; }
         public string? ReturnUrl { get; set; }
+
+        public double AverageRating { get; set; }
+        public int RatingsCount { get; set; }
+        public int? UserRating { get; set; }
     }
 }

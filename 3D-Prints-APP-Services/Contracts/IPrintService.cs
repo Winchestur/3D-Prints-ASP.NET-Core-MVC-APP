@@ -24,5 +24,8 @@ namespace _3D_Prints_APP_Services.Contracts
         Task<ICollection<PrintViewModel>> GetLatestPublicPrintsAsync(int count);
 
         Task MakePrivateAsync(int printId, string userId);
+
+        Task RatePrintAsync(int printId, string userId, int value);
+        //Task<PrintViewModel?> GetWorldPrintDetailsAsync(int id, string userId);
     }
 }

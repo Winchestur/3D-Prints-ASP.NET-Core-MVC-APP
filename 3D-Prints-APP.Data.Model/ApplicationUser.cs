@@ -10,5 +10,7 @@ namespace _3DPrintsAPP.Data.Models
 
         public virtual ICollection<UserCollectionPrint> UserCollectionPrints { get; set; }
             = new HashSet<UserCollectionPrint>();
+        public virtual ICollection<PrintRating> PrintRatings { get; set; }
+            = new HashSet<PrintRating>();
     }
 }

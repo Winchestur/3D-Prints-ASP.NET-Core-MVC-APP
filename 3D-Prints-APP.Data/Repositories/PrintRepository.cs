@@ -119,5 +119,71 @@ namespace _3D_Prints_APP.Data.Repositories
                 .Select(x => x.PrintId)
                 .ToHashSetAsync();
         }
+
+        public async Task AddOrUpdateRatingAsync(int printId, string userId, int value)
+        {
+            var rating = await dbContext.PrintRatings
+                .FirstOrDefaultAsync(x => x.PrintId == printId && x.UserId == userId);
+
+            if (rating == null)
+            {
+                rating = new PrintRating
+                {
+                    PrintId = printId,
+                    UserId = userId,
+                    Value = value
+                };
+
+                await dbContext.PrintRatings.AddAsync(rating);
+            }
+            else
+            {
+                rating.Value = value;
+                dbContext.PrintRatings.Update(rating);
+            }
+
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<int?> GetUserRatingAsync(int printId, string userId)
+        {
+            return await dbContext.PrintRatings
+                .Where(x => x.PrintId == printId && x.UserId == userId)
+                .Select(x => (int?)x.Value)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Dictionary<int, double>> GetAverageRatingsAsync(IEnumerable<int> printIds)
+        {
+            return await dbContext.PrintRatings
+                .Where(x => printIds.Contains(x.PrintId))
+                .GroupBy(x => x.PrintId)
+                .Select(g => new
+                {
+                    PrintId = g.Key,
+                    Avg = g.Average(x => x.Value)
+                })
+                .ToDictionaryAsync(x => x.PrintId, x => x.Avg);
+        }
+
+        public async Task<Dictionary<int, int>> GetRatingsCountAsync(IEnumerable<int> printIds)
+        {
+            return await dbContext.PrintRatings
+                .Where(x => printIds.Contains(x.PrintId))
+                .GroupBy(x => x.PrintId)
+                .Select(g => new
+                {
+                    PrintId = g.Key,
+                    Count = g.Count()
+                })
+                .ToDictionaryAsync(x => x.PrintId, x => x.Count);
+        }
+
+        public async Task<Dictionary<int, int>> GetUserRatingsForPrintsAsync(IEnumerable<int> printIds, string userId)
+        {
+            return await dbContext.PrintRatings
+                .Where(x => x.UserId == userId && printIds.Contains(x.PrintId))
+                .ToDictionaryAsync(x => x.PrintId, x => x.Value);
+        }
     }
 }

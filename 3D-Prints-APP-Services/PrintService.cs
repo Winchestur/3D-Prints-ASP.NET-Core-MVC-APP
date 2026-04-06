@@ -196,6 +196,11 @@ namespace _3D_Prints_APP_Services
             var prints = await printRepository.GetAllPublicAsync();
             var userCollectionIds = await printRepository.GetUserCollectionIdsAsync(userId);
 
+            var printIds = prints.Select(p => p.Id).ToList();
+            var averageRatings = await printRepository.GetAverageRatingsAsync(printIds);
+            var ratingsCount = await printRepository.GetRatingsCountAsync(printIds);
+            var userRatings = await printRepository.GetUserRatingsForPrintsAsync(printIds, userId);
+
             return prints.Select(p => new PrintViewModel
             {
                 Id = p.Id,
@@ -206,8 +211,11 @@ namespace _3D_Prints_APP_Services
                 UploadedTime = p.UploadedTime,
                 IsPublic = p.IsPublic,
                 OwnerName = p.User?.UserName,
+                OwnerId = p.UserId,
                 IsInCollection = userCollectionIds.Contains(p.Id),
-                OwnerId = p.UserId
+                AverageRating = averageRatings.ContainsKey(p.Id) ? Math.Round(averageRatings[p.Id], 1) : 0,
+                RatingsCount = ratingsCount.ContainsKey(p.Id) ? ratingsCount[p.Id] : 0,
+                UserRating = userRatings.ContainsKey(p.Id) ? userRatings[p.Id] : null
             }).ToList();
         }
 
@@ -303,6 +311,18 @@ namespace _3D_Prints_APP_Services
             print.IsPublic = false;
 
             await printRepository.UpdateAsync(print);
+        }
+
+        public async Task RatePrintAsync(int printId, string userId, int value)
+        {
+            var print = await printRepository.GetPublicByIdAsync(printId);
+
+            if (print == null)
+            {
+                throw new KeyNotFoundException("Public print not found.");
+            }
+
+            await printRepository.AddOrUpdateRatingAsync(printId, userId, value);
         }
     }
 }

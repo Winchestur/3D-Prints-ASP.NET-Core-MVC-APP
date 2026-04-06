@@ -19,6 +19,7 @@ namespace _3DPrintsAPP.Data
         public DbSet<PrinterOption> PrinterOptions { get; set; } = null!;
         public DbSet<Filament> Filaments { get; set; } = null!;
         public DbSet<FilamentOption> FilamentOptions { get; set; } = null!;
+        public DbSet<PrintRating> PrintRatings { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

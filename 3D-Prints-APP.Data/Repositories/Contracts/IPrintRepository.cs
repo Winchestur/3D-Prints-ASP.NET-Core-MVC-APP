@@ -21,5 +21,11 @@ namespace _3D_Prints_APP.Data.Repositories.Contracts
         Task<ICollection<Print>> GetCollectionByUserIdAsync(string userId);
         Task<ICollection<Print>> GetLatestPublicPrintsAsync(int count);
         Task<HashSet<int>> GetUserCollectionIdsAsync(string userId);
+
+        Task AddOrUpdateRatingAsync(int printId, string userId, int value);
+        Task<int?> GetUserRatingAsync(int printId, string userId);
+        Task<Dictionary<int, double>> GetAverageRatingsAsync(IEnumerable<int> printIds);
+        Task<Dictionary<int, int>> GetRatingsCountAsync(IEnumerable<int> printIds);
+        Task<Dictionary<int, int>> GetUserRatingsForPrintsAsync(IEnumerable<int> printIds, string userId);
     }
 }
