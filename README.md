@@ -159,7 +159,7 @@ Update-Database
 ---
 
     Admin profile
-     - admin@abv.bg 
+     - admin@site.com
      - password: admin123456
 
 ---
